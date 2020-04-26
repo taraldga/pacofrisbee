@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Player from 'Types/Player'
 import { ScoreEntry } from 'Types/ScoreEntry'
 import PlayerRow from './PlayerRow'
 
