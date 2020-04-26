@@ -2,6 +2,7 @@ import * as React from 'react'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
+import './NumberInput.css'
 
 
 export interface NumberInputProps {
@@ -19,7 +20,7 @@ const NumberInput : React.FC<NumberInputProps> = ({
         <InputGroup.Prepend>
           <Button variant="outline-secondary" onClick={() => onChange(value-1)}>-</Button>
         </InputGroup.Prepend>
-      <FormControl width={40} aria-describedby="basic-addon1" value={value} onChange={(e) => onChange(parseInt(e.target.value))} />
+      <FormControl className="number-input" aria-describedby="basic-addon1" value={value} onChange={(e) => onChange(parseInt(e.target.value))} />
       <InputGroup.Append>
         <Button variant="outline-secondary" onClick={() => onChange(value+1)}>+</Button>
       </InputGroup.Append>
