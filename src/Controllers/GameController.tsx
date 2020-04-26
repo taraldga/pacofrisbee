@@ -28,9 +28,9 @@ const GameController: React.FC<RoundControllerProps> = ({
     }
   }
 
-  console.log(scoreEntries)
   return(
     <div>
+      <h2>Playing a game on {field.name}</h2>
       <HoleView holeNumber={currentHole} scoreEntries={scoreEntries.filter(entry => entry.hole === currentHole)} updateScoreEntry={updateScore} />
     </div>
   )

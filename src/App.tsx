@@ -41,6 +41,7 @@ function App() {
   }
   return (
     <div className="App">
+      <h1>PacoFrisbeeGolf</h1>
       <RoundController field={field} players={players}/>
     </div>
   );
