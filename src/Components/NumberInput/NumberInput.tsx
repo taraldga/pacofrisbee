@@ -20,7 +20,7 @@ const NumberInput : React.FC<NumberInputProps> = ({
         <InputGroup.Prepend>
           <Button variant="outline-secondary" onClick={() => onChange(value-1)}>-</Button>
         </InputGroup.Prepend>
-      <FormControl className="number-input" aria-describedby="basic-addon1" value={value} onChange={(e) => onChange(parseInt(e.target.value))} />
+      <FormControl  className="number-input" aria-describedby="basic-addon1" value={value} onChange={(e) => onChange(e.target.value.length > 0 ? parseInt(e.target.value): 0)} />
       <InputGroup.Append>
         <Button variant="outline-secondary" onClick={() => onChange(value+1)}>+</Button>
       </InputGroup.Append>
