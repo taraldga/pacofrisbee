@@ -36,6 +36,10 @@ function App() {
       {
         number: 3,
         par: 3
+      },
+      {
+        number: 4,
+        par: 5
       }
     ]
   }
