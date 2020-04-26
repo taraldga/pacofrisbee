@@ -5,6 +5,7 @@ import { ScoreEntry } from 'Types/ScoreEntry'
 import Field from 'Types/Field'
 import HoleView from 'Components/HoleView'
 import createInitialScoreEntries from 'helpers/createInitialScoreEntries'
+import HoleNavigation from 'Components/HoleNavigation/HoleNavigation'
 
 export interface RoundControllerProps {
   players: Player[];
@@ -22,7 +23,6 @@ const GameController: React.FC<RoundControllerProps> = ({
     let newFields = scoreEntries.slice();
     let scoreToUpdate = newFields.find(entry => (entry.playerId === playerId && entry.hole === currentHole))
     if(scoreToUpdate) {
-      console.log(scoreToUpdate)
       scoreToUpdate.playerScore = newScore;
       setScoreEntries(newFields)
     }
@@ -32,6 +32,11 @@ const GameController: React.FC<RoundControllerProps> = ({
     <div>
       <h2>Playing a game on {field.name}</h2>
       <HoleView holeNumber={currentHole} scoreEntries={scoreEntries.filter(entry => entry.hole === currentHole)} updateScoreEntry={updateScore} />
+      <HoleNavigation 
+        currentHole={currentHole}
+        updateCurrentHole={(newHole) => setCurrentHole(newHole)}
+        lastHole={field.holes.length}
+      />
     </div>
   )
 }
