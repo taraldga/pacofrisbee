@@ -1,8 +1,16 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 import './App.css';
-import RoundController from './Controllers/GameController';
+import RoundController from './controllers/GameController';
 import Player from './Types/Player';
 import Field from 'Types/Field';
+import HomeScreen from 'modules/HomeScreen';
 
 
 function App() {
@@ -46,7 +54,15 @@ function App() {
   return (
     <div className="App">
       <h1>PacoFrisbeeGolf</h1>
-      <RoundController field={field} players={players}/>
+
+      <Switch>
+        <Route exact path="/">
+          <HomeScreen />
+        </Route>
+        <Route exact path="/game/:gameId">
+          <RoundController field={field} players={players}/>
+        </Route>
+      </Switch>
     </div>
   );
 }

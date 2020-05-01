@@ -3,9 +3,9 @@ import * as React from 'react'
 import Player from 'Types/Player'
 import { ScoreEntry } from 'Types/ScoreEntry'
 import Field from 'Types/Field'
-import HoleView from 'Components/HoleView'
+import HoleView from 'components/HoleView'
 import createInitialScoreEntries from 'helpers/createInitialScoreEntries'
-import HoleNavigation from 'Components/HoleNavigation/HoleNavigation'
+import HoleNavigation from 'components/HoleNavigation/HoleNavigation'
 
 export interface RoundControllerProps {
   players: Player[];
