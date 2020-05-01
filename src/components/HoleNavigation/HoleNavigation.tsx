@@ -1,23 +1,29 @@
 import * as React from 'react'
+
 import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom'
 
 export interface HoleNavigationProps {
   currentHole: number;
   lastHole: number;
-  updateCurrentHole: (nextHoleNumber: number) => void;
+  gameId: string;
 }
 
 const HoleNavigation: React.FC<HoleNavigationProps> = ({
   currentHole,
   lastHole,
-  updateCurrentHole
+  gameId
 }) => {
 
   return (
     <div className="row center">
-      <Button disabled={currentHole === 1} onClick={() => updateCurrentHole(currentHole-1)}>Previous</Button>
+      <Link to={`/game/${gameId}/${currentHole-1}`}>
+        <Button disabled={currentHole === 1}>Previous</Button>
+      </Link>
       <span>{currentHole}</span>
-      <Button disabled={currentHole === lastHole } onClick={() => updateCurrentHole(currentHole+1)}>Next</Button>
+      <Link to={`/game/${gameId}/${currentHole+1}`}>
+        <Button disabled={currentHole === 1}>Previous</Button>
+      </Link>
     </div>
   )
 }

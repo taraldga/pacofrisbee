@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { ScoreEntry } from 'Types/ScoreEntry'
-import PlayerRow from './PlayerRow'
 
+import PlayerRow from './PlayerRow'
+import { ScoreEntry } from 'types/ScoreEntry'
 
 export interface HoleViewProps {
   scoreEntries: ScoreEntry[];

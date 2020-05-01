@@ -1,7 +1,6 @@
-import Field from "Types/Field";
-import Player from "Types/Player";
-import { ScoreEntry } from "Types/ScoreEntry";
-
+import Field from "types/Field";
+import Player from "types/Player";
+import { ScoreEntry } from "types/ScoreEntry";
 
 const createInitialScoreEntries = (field: Field, players: Player[]): ScoreEntry[] => {
   return field.holes.flatMap(hole => {

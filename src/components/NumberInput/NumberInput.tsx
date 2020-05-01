@@ -1,9 +1,10 @@
-import * as React from 'react'
-import InputGroup from 'react-bootstrap/InputGroup'
-import Button from 'react-bootstrap/Button'
-import FormControl from 'react-bootstrap/FormControl'
 import './NumberInput.css'
 
+import * as React from 'react'
+
+import Button from '@material-ui/core/Button'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
+import TextField from '@material-ui/core/TextField'
 
 export interface NumberInputProps {
   value: number;
@@ -16,15 +17,11 @@ const NumberInput : React.FC<NumberInputProps> = ({
 }) => {
   return (
     <div className="col-sm">
-      <InputGroup className="mb-3">
-        <InputGroup.Prepend>
-          <Button variant="outline-secondary" onClick={() => onChange(value-1)}>-</Button>
-        </InputGroup.Prepend>
-      <FormControl  className="number-input" aria-describedby="basic-addon1" value={value} onChange={(e) => onChange(e.target.value.length > 0 ? parseInt(e.target.value): 0)} />
-      <InputGroup.Append>
-        <Button variant="outline-secondary" onClick={() => onChange(value+1)}>+</Button>
-      </InputGroup.Append>
-    </InputGroup>
+      <ButtonGroup color="primary" variant="contained" aria-label="outlined primary button group">
+        <Button>-</Button>
+        <TextField variant="outlined"  value="3" />
+        <Button color="primary" variant="contained">+</Button>
+      </ButtonGroup>
     </div>
   )
 }
