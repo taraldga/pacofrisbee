@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import GameController from './controllers/GameController';
-import GameCreator from './modules/GameCreator'
+import GameCreator from './modules/GameCreator/GameCreator'
 import HomeScreen from 'modules/HomeScreen';
 import React from 'react';
 
@@ -23,7 +23,7 @@ function App() {
           <Route exact path="/create-game">
             <GameCreator />
           </Route>
-          <Route exact path="/game/:gameId/(:holeId)">
+          <Route exact path="/game/:gameId/:holeId">
             <GameController />
           </Route>
         </Switch>
