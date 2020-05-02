@@ -11,6 +11,7 @@ import GameCreator from './modules/GameCreator/GameCreator'
 import HomeScreen from 'modules/HomeScreen';
 import TopBar from 'components/TopBar/TopBar'
 import React from 'react';
+import GameOverview from 'modules/GameOverview/GameOverview';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route exact path="/game/:gameId/:holeId">
             <GameController />
+          </Route>
+          <Route exact path="/gameoverview">
+            <GameOverview />
           </Route>
         </Switch>
       </div>
