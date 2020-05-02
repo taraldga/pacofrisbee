@@ -17,6 +17,10 @@
   width: 300px;
 }
 
+.add-player-input {
+  width: 200px;
+}
+
 .add-player-row {
   display: flex;
   justify-content: space-around;
