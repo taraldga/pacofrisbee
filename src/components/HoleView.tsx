@@ -17,7 +17,6 @@ const HoleView: React.FC<HoleViewProps> = ({
   holeNumber,
   updateScoreEntry
 }) => {
-  console.log(scoreEntries)
   return(
     <div>
       <h3>Hole number {holeNumber} </h3>
