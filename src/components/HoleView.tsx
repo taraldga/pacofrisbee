@@ -6,6 +6,9 @@ import Player from 'types/Player'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableBody from '@material-ui/core/TableBody'
 import Table from '@material-ui/core/Table'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
 
 export interface HoleViewProps {
   players: Player[];
@@ -29,6 +32,12 @@ const HoleView: React.FC<HoleViewProps> = ({
             size={false ? 'small' : 'medium'}
             aria-label="enhanced table"
             >
+        <TableHead>
+        <TableRow>
+            <TableCell>Player Name</TableCell>
+            <TableCell align="right">Score</TableCell>
+          </TableRow>
+        </TableHead>
             <TableBody>
             {
               players.map(player => {
