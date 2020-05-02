@@ -1,11 +1,25 @@
-.creator-layout {
-
+.game-creator-view {
+  text-align: center;
 }
 
 .input-group {
-  margin: 20px 0;
+  margin: 20px 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.input-group table {
+  max-height: 400px;
 }
 
 .gamecreator-select {
   width: 300px;
+}
+
+.add-player-row {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px 0;
 }

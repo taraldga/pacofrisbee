@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getFields, getPlayers, createGame } from 'data/FrisbeegolfData';
+import { getFields, getPlayers, createGame, savePlayers } from 'data/FrisbeegolfData';
 import { useHistory } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,8 @@ import Select from '@material-ui/core/Select';
 import uniqid from 'uniqid'
 import "./GameCreator.css"
 import Player from 'types/Player';
+import TextField from '@material-ui/core/TextField';
+
 
 const GameCreator : React.FC = () => {
     let history = useHistory();
@@ -22,6 +24,8 @@ const GameCreator : React.FC = () => {
         players: [],
         scoreEntries: [] 
     })
+
+    const [newPlayerName, setNewPlayerName] = useState("")
     
     const fields = getFields()
     const players = getPlayers()
@@ -55,11 +59,23 @@ const GameCreator : React.FC = () => {
         createGame(game)
         history.push(`/game/${game.id}/${1}`)
     }
+
+    const addPlayer = () => {
+        const newPlayer: Player = {
+            id: uniqid(),
+            name: newPlayerName
+        }
+        players.push(newPlayer)
+        savePlayers(players);
+        updatePlayers(newPlayer)
+        setNewPlayerName("")
+    }
     
     const isSelected = (playerId: string) => game.players.findIndex(player => player.id === playerId) > -1
     
     return (
-        <>
+        <div className="game-creator-view">
+        <h3>Select field</h3>
         <div className="input-group">
             <FormControl className="gamecreator-select">
                 <InputLabel>Select Field</InputLabel>
@@ -74,6 +90,7 @@ const GameCreator : React.FC = () => {
                 </Select>
             </FormControl>
         </div>
+        <h3>Select players</h3>
         <div className="input-group">
             <TableContainer>
             <Table
@@ -110,13 +127,18 @@ const GameCreator : React.FC = () => {
             </Table>
             </TableContainer>
         </div>
+        <h3>Add player</h3>
+        <div className="add-player-row">
+            <TextField onChange={(e) => setNewPlayerName(e.target.value)} value={newPlayerName} id="new-player-input" label="Player Name" variant="standard" />
+            <Button color="default" size="large" variant="contained" onClick={() => addPlayer()} >Add player</Button>
+        </div>
         <div className="input-group">
             <Link to="/">
                 <Button color="default" size="large" variant="contained">Home</Button>
             </Link>
             <Button color="primary" size="large" variant="contained" onClick={startGame}>Start Game</Button>
         </div>
-        </>
+        </div>
     );
 }
 

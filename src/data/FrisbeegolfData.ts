@@ -40,9 +40,19 @@ export function getFields () {
     return fields;
 }
 
+export function savePlayers(playersToSave: Player[]){
+    window.localStorage.setItem("pacoGolfSavedPlayers", JSON.stringify(playersToSave))
+}
 
 export function getPlayers() {
-    return players;
+    let currentlySavedPlayers = window.localStorage.getItem("pacoGolfSavedPlayers");
+    let playersObject = currentlySavedPlayers ? JSON.parse(currentlySavedPlayers) as Player[] : [];
+    if(playersObject.length === 0) {
+        savePlayers(players);
+        return players
+    } else {
+        return playersObject;
+    }
 }
 
 function getGameData(): Game[] {

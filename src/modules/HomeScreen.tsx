@@ -7,7 +7,10 @@ const HomeScreen : React.FC = () => {
     return (
         <div>
             <Link to="/create-game">
-                <Button variant="contained" color="primary" size="large">Start ny runde</Button>
+                <Button variant="contained" color="primary" size="large">Start new round</Button>
+            </Link>
+            <Link to="/view-games">
+                <Button variant="contained" color="primary" size="large">View my games</Button>
             </Link>
         </div>
     );
