@@ -4,6 +4,7 @@ import { ScoreEntry } from "./ScoreEntry";
 
 export interface Game {
     id?: string
+    date: Date
     field: Field
     players: Player[]
     scoreEntries: ScoreEntry[]
