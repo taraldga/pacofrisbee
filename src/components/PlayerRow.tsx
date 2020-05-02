@@ -16,11 +16,10 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
 }) => {
   return (
     <TableRow
-      hover
       tabIndex={-1}
       key={name}
     >
-  <TableCell padding="checkbox">
+  <TableCell>
     {name}
   </TableCell>
   <TableCell align="right"><NumberInput value={score} onChange={updateScoreEntry}/></TableCell>

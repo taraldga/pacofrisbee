@@ -17,9 +17,9 @@ const NumberInput : React.FC<NumberInputProps> = ({
 }) => {
   return (
     <div className="col-sm">
-      <ButtonGroup color="primary" variant="contained" aria-label="outlined primary button group">
+      <ButtonGroup style={{width: 130}} color="primary" variant="contained" aria-label="outlined primary button group">
         <Button onClick={() => {onChange(value-1)}}>-</Button>
-        <TextField variant="outlined"  value={value} onChange={(e) => onChange(e.target.value.length > 0 ? parseInt(e.target.value): 0)} />
+        <TextField className="number-input" variant="outlined"  value={value} onChange={(e) => onChange(e.target.value.length > 0 ? parseInt(e.target.value): 0)} />
         <Button onClick={() => onChange(value+1)}>+</Button>
       </ButtonGroup>
     </div>
