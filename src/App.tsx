@@ -1,53 +1,35 @@
-import React from 'react';
 import './App.css';
-import RoundController from './Controllers/GameController';
-import Player from './Types/Player';
-import Field from 'Types/Field';
 
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch
+} from "react-router-dom";
+
+import GameController from './controllers/GameController';
+import GameCreator from './modules/GameCreator/GameCreator'
+import HomeScreen from 'modules/HomeScreen';
+import TopBar from 'components/TopBar/TopBar'
+import React from 'react';
 
 function App() {
-
-  const players: Player[] = [
-    {
-      id: "1",
-      name: "Tarald"
-    },
-    {
-      id: "2",
-      name: "Pål"
-    },
-    {
-      id: "3",
-      name: "William",
-    }
-  ]
-
-  const field: Field = {
-    name: "Holmenkollen",
-    holes: [
-      {
-        number: 1,
-        par: 3
-      },
-      {
-        number: 2,
-        par: 3
-      },
-      {
-        number: 3,
-        par: 3
-      },
-      {
-        number: 4,
-        par: 5
-      }
-    ]
-  }
   return (
-    <div className="App">
-      <h1>PacoFrisbeeGolf</h1>
-      <RoundController field={field} players={players}/>
-    </div>
+    <Router>
+      <div className="App">
+        <TopBar />
+        <Switch>
+          <Route exact path="/">
+            <HomeScreen />
+          </Route>
+          <Route exact path="/create-game">
+            <GameCreator />
+          </Route>
+          <Route exact path="/game/:gameId/:holeId">
+            <GameController />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

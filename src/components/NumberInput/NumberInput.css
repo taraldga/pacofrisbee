@@ -2,3 +2,6 @@
   max-width: 50px;
   font-weight: bold;
 }
+.number-input>div>input {
+  height: 0px;
+}

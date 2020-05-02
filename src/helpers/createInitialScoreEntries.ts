@@ -1,22 +1,28 @@
-import Field from "Types/Field";
-import Player from "Types/Player";
-import { ScoreEntry } from "Types/ScoreEntry";
+import Field from "types/Field";
+import Player from "types/Player";
+import { ScoreEntry } from "types/ScoreEntry";
 
 
-const createInitialScoreEntries = (field: Field, players: Player[]): ScoreEntry[] => {
-  return field.holes.flatMap(hole => {
-    return players.map(player => {
-      return {
-        date: new Date(),
-        field: field.name,
-        hole: hole.number,
-        holePar: hole.par,
-        playerId: player.id,
-        playerName: player.name,
-        playerScore: hole.par,
-        updated: false
-      }
-    })
+/**
+ * Creates initial scoreentry values for the given players on the given hole on the given field.
+ * Will use the par as the base for the score.
+ * @param field 
+ * @param holeNumber 
+ * @param players 
+ */
+const createInitialScoreEntries = (field: Field, holeNumber: number, players: Player[]): ScoreEntry[] => {
+  return players.map(player => {
+    const hole = field.holes[holeNumber-1];
+    return {
+      date: new Date(),
+      field: field.name,
+      hole: hole.number,
+      holePar: hole.par,
+      playerId: player.id,
+      playerName: player.name,
+      score: hole.par,
+      updated: false
+    }
   })
 }
 

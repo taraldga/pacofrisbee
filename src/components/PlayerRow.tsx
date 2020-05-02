@@ -1,5 +1,7 @@
 import * as React from 'react'
 import NumberInput from './NumberInput/NumberInput'
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 export interface PlayerRowProps {
   name: string;
@@ -13,10 +15,15 @@ const PlayerRow: React.FC<PlayerRowProps> = ({
   updateScoreEntry
 }) => {
   return (
-      <div className="row">
-        <p className="col-sm">{name}</p>
-        <NumberInput value={score} onChange={updateScoreEntry}/>
-      </div>
+    <TableRow
+      tabIndex={-1}
+      key={name}
+    >
+  <TableCell>
+    {name}
+  </TableCell>
+  <TableCell align="right"><NumberInput value={score} onChange={updateScoreEntry}/></TableCell>
+  </TableRow>
   )
 }
 
