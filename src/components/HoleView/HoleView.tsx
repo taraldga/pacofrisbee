@@ -1,6 +1,8 @@
 import * as React from 'react'
 
-import PlayerRow from './PlayerRow'
+import './HoleView.css'
+
+import PlayerRow from '../PlayerRow'
 import { ScoreEntry } from 'types/ScoreEntry'
 import Player from 'types/Player'
 import TableContainer from '@material-ui/core/TableContainer'
@@ -9,6 +11,7 @@ import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+
 
 export interface HoleViewProps {
   players: Player[];
@@ -34,8 +37,8 @@ const HoleView: React.FC<HoleViewProps> = ({
             >
         <TableHead>
         <TableRow>
-            <TableCell>Player Name</TableCell>
-            <TableCell align="right">Score</TableCell>
+            <TableCell className="table-header-cell">Player Name</TableCell>
+            <TableCell align="center" className="table-header-cell">Score</TableCell>
           </TableRow>
         </TableHead>
             <TableBody>

@@ -7,7 +7,7 @@ import {
   useHistory
 } from "react-router-dom";
 
-import HoleView from 'components/HoleView'
+import HoleView from 'components/HoleView/HoleView'
 import { ScoreEntry } from 'types/ScoreEntry'
 import { fetchGame, saveGame } from 'data/FrisbeegolfData';
 import Pagination from '@material-ui/lab/Pagination';
