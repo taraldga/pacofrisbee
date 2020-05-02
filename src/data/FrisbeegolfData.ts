@@ -57,7 +57,14 @@ export function getPlayers() {
 
 function getGameData(): Game[] {
     let currentlySavedGames = window.localStorage.getItem("pacoGolfSavedData");
-    return currentlySavedGames ? JSON.parse(currentlySavedGames): undefined;
+    let parsedGames = currentlySavedGames ? JSON.parse(currentlySavedGames): undefined;
+    return parsedGames.map((game: Game) => ({
+        id: game.id,
+        date: new Date(game.date),
+        field: game.field,
+        players: game.players,
+        scoreEntries: game.scoreEntries
+    }))
 }
 
 export function createGame(game: Game) {
@@ -75,6 +82,11 @@ export function fetchGame(id: string): Game | undefined {
         return undefined
     }
 }
+
+export function fetchGames(): Game[] {
+    return getGameData();
+}
+
 
 
 export function saveGame(gameToSave: Game) {
