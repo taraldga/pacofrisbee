@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import './HoleView.css'
-
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import PlayerRow from '../PlayerRow'
 import { ScoreEntry } from 'types/ScoreEntry'
 import Player from 'types/Player'
@@ -11,7 +11,7 @@ import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
-
+import Paper from '@material-ui/core/Paper'
 
 export interface HoleViewProps {
   players: Player[];
@@ -20,16 +20,28 @@ export interface HoleViewProps {
   updateScoreEntry: (playerId: string, newScore: number) => void
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    tablecontainer: {
+      margin: "0 15px",
+      width: "auto",
+      textAlign: "center"
+    },
+  }),
+);
+
 const HoleView: React.FC<HoleViewProps> = ({
   players,
   scoreEntries,
   holeNumber,
   updateScoreEntry
 }) => {
+  const classes = useStyles();
+
   return(
     <div>
+      <TableContainer component={Paper} className={classes.tablecontainer}>
       <h3>Hole number {holeNumber} </h3>
-      <TableContainer>
         <Table
             aria-labelledby="tableTitle"
             size={false ? 'small' : 'medium'}
