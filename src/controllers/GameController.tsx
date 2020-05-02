@@ -1,9 +1,8 @@
 import * as React from 'react'
 
+import './GameController.css'
+
 import {
-  Route,
-  BrowserRouter as Router,
-  Switch,
   useParams,
   useHistory
 } from "react-router-dom";
@@ -14,6 +13,8 @@ import { fetchGame, saveGame } from 'data/FrisbeegolfData';
 import Pagination from '@material-ui/lab/Pagination';
 import { Game } from 'types/Game';
 import createInitialScoreEntries from 'helpers/createInitialScoreEntries';
+import Button from '@material-ui/core/Button';
+import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
 
 const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): ScoreEntry[] => {
   if(game) {
@@ -30,46 +31,55 @@ const GameController: React.FC = () => {
   const history = useHistory()
   const currentGame = fetchGame(gameId)
 
-  const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[]>([])
+  const [game, setGame] = React.useState<Game | undefined>(currentGame)
+  const [showStandings, setShowStandings] = React.useState(false);
 
   const updateScore = (playerId: string, newScore: number) => {
-    let newFields = scoreEntries.slice();
-    let scoreToUpdate = newFields.findIndex(entry => (entry.playerId === playerId && entry.hole === +holeId))
-    if(scoreToUpdate > -1) {
-      newFields[scoreToUpdate].score = newScore;
-      setScoreEntries(newFields)
+    let newScoreEntries = game?.scoreEntries.slice();
+    if(newScoreEntries && game) {
+      let scoreToUpdate = newScoreEntries.findIndex(entry => (entry.playerId === playerId && entry.hole === +holeId))
+      if(scoreToUpdate > -1) {
+        newScoreEntries[scoreToUpdate].score = newScore;
+        setGame({
+          ...game,
+          scoreEntries: newScoreEntries
+        })
+      }
     }
+
   }
 
   const changePage = (nextPage: number) => {
-    if(currentGame) { 
-      scoreEntries.forEach(entry => {
-        const entryIndex = currentGame.scoreEntries.findIndex(oldEntry => (oldEntry.playerId === entry.playerId && oldEntry.hole === entry.hole));
-        if(entryIndex > -1) {
-          currentGame.scoreEntries.splice(entryIndex, 1, entry)
-        } else {
-          currentGame.scoreEntries.push(entry)
-        }
-      })
-      saveGame(currentGame);
-      setScoreEntries([])
-      history.push(`/game/${currentGame.id}/${nextPage}`)
+    if(game) { 
+      saveGame(game);
+      history.push(`/game/${game.id}/${nextPage}`)
     }
   }
 
-  if(!currentGame) {
+  if(!game) {
     return null
   }
 
-  if(scoreEntries.length === 0) {
-    let newScoreEntries = findOrCreateScoreEntries(currentGame, +holeId)
-    setScoreEntries(newScoreEntries)
+  if(game?.scoreEntries.filter(entry => entry.hole === +holeId).length === 0) {
+    if(game) {
+      let generatedScoreEntries = findOrCreateScoreEntries(currentGame, +holeId)
+
+      const newScoreEntries = [...game.scoreEntries, ...generatedScoreEntries]
+      
+      setGame({
+        ...game,
+        scoreEntries: newScoreEntries
+      })
+    }
   }
+
   return(
     <div>
-      <h2>Playing a game on {currentGame.field.name}</h2>
-      <HoleView players={currentGame.players} holeNumber={+holeId} scoreEntries={scoreEntries.filter(entry => entry.hole === +holeId)} updateScoreEntry={updateScore} />
-      <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={currentGame.field.holes.length} color="primary" />
+      <h2>Playing a game on {game.field.name}</h2>
+      <HoleView players={game.players} holeNumber={+holeId} scoreEntries={game.scoreEntries.filter(entry => entry.hole === +holeId)} updateScoreEntry={updateScore} />
+      <Button className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
+      <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} game={game} />
+      <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={game.field.holes.length} color="primary" />
     </div>
   )
 }
