@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import { Game } from 'types/Game';
 import InputLabel from '@material-ui/core/InputLabel';
-import { MenuItem, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, TableHead, Paper } from '@material-ui/core';
+import { MenuItem, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, TableHead } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
 import uniqid from 'uniqid'
 import "./GameCreator.css"
@@ -91,10 +91,8 @@ const GameCreator : React.FC = () => {
         </div>
         <h3>Select players</h3>
         <div className="input-group">
-            <TableContainer component={Paper}>
-            <Table
-                size={'small'}
-            >
+            <TableContainer>
+            <Table>
                 <TableHead>
                     <TableRow>
                         <TableCell>Name</TableCell>

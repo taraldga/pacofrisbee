@@ -14,9 +14,11 @@ import { Game } from 'types/Game';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    header: {
+      textAlign: "center"
+    },
     root: {
       backgroundColor: theme.palette.background.paper,
-      margin: "15px"
     },
   }),
 );
@@ -27,6 +29,7 @@ const GameOverview = () => {
   let games = fetchGames();
   return (
     <div>
+      <h2 className={classes.header}>My played games</h2>
       <List className={classes.root}>
         {
           games.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: Game, idx: number) => {
