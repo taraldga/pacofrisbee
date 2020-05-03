@@ -25,6 +25,7 @@ const GameCreator : React.FC = () => {
     })
 
     const [newPlayerName, setNewPlayerName] = useState("")
+    const [error, setError] = useState<{[key: string]: string}>({})
     
     const fields = getFields()
     const players = getPlayers()
@@ -55,8 +56,13 @@ const GameCreator : React.FC = () => {
     }
 
     const startGame = () => {
-        createGame(game)
-        history.push(`/game/${game.id}/${1}`)
+        let error = verifyInput(game);
+        if(Object.keys(error).length === 0 && error.constructor === Object) {
+            createGame(game)
+            history.push(`/game/${game.id}/${1}`)
+        } else {
+            setError(error)
+        }
     }
 
     const addPlayer = () => {
@@ -71,12 +77,24 @@ const GameCreator : React.FC = () => {
     }
     
     const isSelected = (playerId: string) => game.players.findIndex(player => player.id === playerId) > -1
+
+    const verifyInput = (game: Game) => {
+        let error: {[key: string]: string} = {};
+
+        if( game.field.name === "" ) {
+            error["field"] = "You must select a field"
+        }
+        if( game.players.length === 0 ) {
+            error["players"] = "You must select at least one player"
+        }
+        return error
+    }
     
     return (
         <div className="game-creator-view">
         <h3>Select field</h3>
         <div className="input-group">
-            <FormControl className="gamecreator-select">
+            <FormControl className="gamecreator-select" error={ error["field"]!== undefined}>
                 <InputLabel>Select Field</InputLabel>
                 <Select
                     placeholder="Select field"
@@ -87,6 +105,7 @@ const GameCreator : React.FC = () => {
                         <MenuItem key={field.id} value={field.id}>{field.name}</MenuItem>
                     ))}
                 </Select>
+
             </FormControl>
         </div>
         <h3>Select players</h3>
