@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getFields, getPlayers, createGame, savePlayers } from 'data/FrisbeegolfData';
 import { useHistory } from "react-router-dom";
 
@@ -12,9 +12,11 @@ import uniqid from 'uniqid'
 import "./GameCreator.css"
 import Player from 'types/Player';
 import TextField from '@material-ui/core/TextField';
+import Field from 'types/Field';
 
 const GameCreator : React.FC = () => {
     let history = useHistory();
+    const [fields, setFields] = useState<Field[]>([])
 
     const [game, setGame] = useState<Game>({
         id: uniqid(),
@@ -24,10 +26,18 @@ const GameCreator : React.FC = () => {
         scoreEntries: [] 
     })
 
+    console.log(game)
+
     const [newPlayerName, setNewPlayerName] = useState("")
     const [error, setError] = useState<{[key: string]: string}>({})
     
-    const fields = getFields()
+    useEffect(() => {
+        const fetchData = async () => {
+          let fields = await getFields()
+          setFields(fields)
+        }
+        fetchData()
+      }, [])
     const players = getPlayers()
 
     const updateField = (event: React.ChangeEvent<{ value: unknown }>) => {

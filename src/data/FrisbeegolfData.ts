@@ -1,6 +1,7 @@
 import Field from "types/Field"
 import { Game } from "types/Game";
 import Player from "types/Player";
+import firebase from "firebase";
 
 const fields: Field[] = [
     {
@@ -34,11 +35,36 @@ const players: Player[] = [
     },
 
 ]
+// Initialize firebase 
+const firebaseConfig = {
+    apiKey: "AIzaSyDOeiSHJc6XFwOP7LrdWrtYAlKDbnWXS-Q",
+    authDomain: "pacount-d131a.firebaseapp.com",
+    databaseURL: "https://pacount-d131a.firebaseio.com",
+    projectId: "pacount-d131a",
+    storageBucket: "pacount-d131a.appspot.com",
+    messagingSenderId: "164274232100",
+    appId: "1:164274232100:web:8f42eb0afee2a473b9f1b1",
+    measurementId: "G-KQKTCY6Y4V"
+  };
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
 
+const db = firebase.firestore();
 
-export function getFields () {
-    return fields;
+export const getFields = async () => {
+    let fireBaseObject = await db.collection('fields').get()
+    let fields: Field[] = []
+    fireBaseObject.forEach(fieldObject => {
+        const newObject = {
+            ...fieldObject.data(),
+            id: fieldObject.id
+        }
+        fields.push(newObject as Field)
+    })
+    return fields
 }
+
 
 export function savePlayers(playersToSave: Player[]){
     window.localStorage.setItem("pacoGolfSavedPlayers", JSON.stringify(playersToSave))
@@ -67,11 +93,8 @@ function getGameData(): Game[] {
     }))
 }
 
-export function createGame(game: Game) {
-    let currentlySavedGames = window.localStorage.getItem("pacoGolfSavedData");
-    let newSave = currentlySavedGames ? JSON.parse(currentlySavedGames) as Game[] : [];
-    newSave.push(game)
-    window.localStorage.setItem("pacoGolfSavedData", JSON.stringify(newSave))
+export const createGame = async (game: Game) => {
+    await db.collection('games').add(game)
 }
 
 export function fetchGame(id: string): Game | undefined {
