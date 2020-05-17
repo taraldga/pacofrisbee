@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "pacofrisbee-ceb7b"
+    "default": "pacount-d131a",
+    "prod": "pacount-d131a"
   }
 }
