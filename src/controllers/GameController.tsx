@@ -21,7 +21,7 @@ import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
 const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): ScoreEntry[] => {
   if(game) {
     const existingScoreEntries = game.scoreEntries.filter(entry => entry.hole === holeId);
-    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players)
+    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players, game.id ?? '')
   } else {
     return []
   }
@@ -31,10 +31,18 @@ const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): Score
 const GameController: React.FC = () => {
   const { holeId, gameId } = useParams();
   const history = useHistory()
-  const currentGame = fetchGame(gameId)
 
-  const [game, setGame] = React.useState<Game | undefined>(currentGame)
+  const [game, setGame] = React.useState<Game | undefined>(undefined);
+  // const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined); 
   const [showStandings, setShowStandings] = React.useState(false);
+
+  React.useEffect(() => {
+    const setupGame = async () => {
+      const currentGame = await fetchGame(gameId)
+      setGame(currentGame as Game)
+    }
+    setupGame()
+  }, [gameId])
 
   const updateScore = (playerId: string, newScore: number) => {
     let newScoreEntries = game?.scoreEntries.slice();
@@ -64,8 +72,7 @@ const GameController: React.FC = () => {
 
   if(game?.scoreEntries.filter(entry => entry.hole === +holeId).length === 0) {
     if(game) {
-      let generatedScoreEntries = findOrCreateScoreEntries(currentGame, +holeId)
-
+      let generatedScoreEntries = findOrCreateScoreEntries(game, +holeId)
       const newScoreEntries = [...game.scoreEntries, ...generatedScoreEntries]
       
       setGame({

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { fetchGames } from 'data/FrisbeegolfData';
+import { getGames } from 'data/FrisbeegolfData';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -25,14 +25,21 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const GameOverview = () => {
+  const [games, setGames] = React.useState<Game[] | undefined>(undefined)
+  React.useEffect(() => {
+    const setupGames = async () => {
+      let games = await getGames();
+      setGames(games)
+    }
+    setupGames();
+  }, [])
   let classes = useStyles()
-  let games = fetchGames();
   return (
     <div>
       <h2 className={classes.header}>My played games</h2>
       <List className={classes.root}>
         {
-          games.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: Game, idx: number) => {
+          games?.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: Game, idx: number) => {
             return (
               <>
                 <Link to={`/game/${game.id}/1`}>

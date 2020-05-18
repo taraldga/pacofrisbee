@@ -16,10 +16,16 @@ import React, { useEffect } from 'react';
 import GameOverview from 'modules/GameOverview/GameOverview';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import { getFields } from 'data/FrisbeegolfData';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+export enum SignInState {
+  waiting,
+  notSignedIn
+}
+
 
 function App() {
-  const [user, setUser] = React.useState<any>()
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [user, setUser] = React.useState<firebase.User | SignInState>(SignInState.waiting)
   // Configure FirebaseUI.
   const uiConfig = {
       // Popup signin flow rather than redirect flow.
@@ -35,8 +41,9 @@ function App() {
   firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         setUser(user)
-      } 
-      setIsLoading(false)
+      } else {
+        setUser(SignInState.notSignedIn)
+      }
   });
 
 
@@ -48,11 +55,19 @@ function App() {
     fetchData()
   }, [])
 
+  let loginScreenJsx;
+  if(user === SignInState.notSignedIn){
+    loginScreenJsx = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+  } else if(user === SignInState.waiting) {
+    loginScreenJsx = <CircularProgress />
+  }
+
   return (
     <>
     <Router>
     <TopBar />
-    {user ? (
+    {
+    (user !== SignInState.waiting && user !== SignInState.notSignedIn) ? (
       <div className="App">
         <Switch>
           <Route exact path="/">
@@ -71,8 +86,8 @@ function App() {
       </div>
     ):
     (
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-      )
+      loginScreenJsx
+    )
     }
     </Router>
     </>
