@@ -96,7 +96,8 @@ export const getGames = async ()  =>  {
  * @param game The game to save
  */
 export const createGame = async (game: Game) => {
-    await db.collection('games').add(game)
+    const newGame = await db.collection('games').add(game);
+    return newGame;
 }
 
 /**

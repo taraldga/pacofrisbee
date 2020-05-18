@@ -71,11 +71,11 @@ const GameCreator : React.FC = () => {
         })
     }
 
-    const startGame = () => {
+    const startGame = async () => {
         let error = verifyInput(game);
         if(Object.keys(error).length === 0 && error.constructor === Object) {
-            createGame(game)
-            history.push(`/game/${game.id}/${1}`)
+            let dbGame = await createGame(game)
+            history.push(`/game/${dbGame.id}/${1}`)
         } else {
             setError(error)
         }
