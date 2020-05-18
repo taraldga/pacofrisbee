@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getFields, getPlayers, createGame, savePlayers } from 'data/FrisbeegolfData';
+import { getFields, getPlayers, createGame, savePlayer } from 'data/FrisbeegolfData';
 import { useHistory } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
@@ -26,10 +26,9 @@ const GameCreator : React.FC = () => {
         scoreEntries: [] 
     })
 
-    console.log(game)
-
     const [newPlayerName, setNewPlayerName] = useState("")
     const [error, setError] = useState<{[key: string]: string}>({})
+    const [players, setPlayers] = useState<Player[]>([])
     
     useEffect(() => {
         const fetchData = async () => {
@@ -38,7 +37,14 @@ const GameCreator : React.FC = () => {
         }
         fetchData()
       }, [])
-    const players = getPlayers()
+
+      useEffect(() => {
+        const fetchData = async () => {
+          let players = await getPlayers()
+          setPlayers(players)
+        }
+        fetchData()
+      }, [])
 
     const updateField = (event: React.ChangeEvent<{ value: unknown }>) => {
         const newField = fields.find(field => field.id === event.target.value);
@@ -81,7 +87,7 @@ const GameCreator : React.FC = () => {
             name: newPlayerName
         }
         players.push(newPlayer)
-        savePlayers(players);
+        savePlayer(newPlayer);
         updatePlayers(newPlayer)
         setNewPlayerName("")
     }
