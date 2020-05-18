@@ -2,6 +2,7 @@ import Field from "types/Field"
 import { Game } from "types/Game";
 import Player from "types/Player";
 import firebase from "firebase";
+import { ScoreEntry } from "types/ScoreEntry";
 
 // Initialize firebase 
 const firebaseConfig = {
@@ -19,26 +20,6 @@ firebase.analytics();
 
 const db = firebase.firestore();
 
-const players: Player[] = [
-    {
-        id: "1",
-        name: "Tarald Gåsbakk"
-    },
-    {
-        id: "2",
-        name: "Pål Nesbø Lekven"
-    },
-    {
-        id: "3",
-        name: "Håvard Snarby"
-    },
-    {
-        id: "4",
-        name: "William Tisdal"
-    },
-
-]
-
 
 export const getFields = async () => {
     let fireBaseObject = await db.collection('fields').get()
@@ -53,23 +34,44 @@ export const getFields = async () => {
     return fields
 }
 
+function safelyParseJSON (json: string) {
+    let parsed
+    try {
+      parsed = JSON.parse(json)
+    } catch (e) {
+      return[]
+    }
+  
+    return parsed // Could be undefined!
+  }
 
-export function savePlayers(playersToSave: Player[]){
-    window.localStorage.setItem("pacoGolfSavedPlayers", JSON.stringify(playersToSave))
+
+export function savePlayer(playerToSave: Player){
+    let localySavedPlayersObject = window.localStorage.getItem("pacoGolfSavedPlayers");
+    let localPlayerList =safelyParseJSON(localySavedPlayersObject ?? '[]') as Player[]
+    localPlayerList.push(playerToSave)
+    window.localStorage.setItem("pacoGolfSavedPlayers", JSON.stringify(localPlayerList))
 }
+
+
+
 
 /**
  * Get all players currently stored on the server
  */
-export function getPlayers() {
-    let currentlySavedPlayers = window.localStorage.getItem("pacoGolfSavedPlayers");
-    let playersObject = currentlySavedPlayers ? JSON.parse(currentlySavedPlayers) as Player[] : [];
-    if(playersObject.length === 0) {
-        savePlayers(players);
-        return players
-    } else {
-        return playersObject;
-    }
+export const getPlayers = async () => {
+    let localySavedPlayersObject = window.localStorage.getItem("pacoGolfSavedPlayers");
+    let localPlayerList =safelyParseJSON(localySavedPlayersObject ?? '[]')
+    let fireBaseObject = await db.collection('users').get()
+    let players: Player[] = []
+    fireBaseObject.forEach(fieldObject => {
+        const newObject = {
+            ...fieldObject.data(),
+            objectId: fieldObject.id
+        }
+        players.push(newObject as Player)
+    })
+    return [...localPlayerList, ...players]
 }
 
 /**
@@ -79,15 +81,12 @@ export const getGames = async ()  =>  {
     const firebaseObject = await db.collection('games').get()
     const games: Game[] = [];
     firebaseObject.forEach(gameObject => {
-        console.log(gameObject.data())
         const newObject = {
             ...gameObject.data(),
             id: gameObject.id,
             date: new Date(gameObject.data().date.seconds*1000),
         }
-        console.log(gameObject.data().date)
         games.push(newObject as Game)
-        console.log(games)
     })
     return games;
 }
@@ -125,12 +124,48 @@ export const fetchGame = async (id: string) => {
 }
 
 
-
-
-export function saveGame(gameToSave: Game) {
-
+const cleanScoreEntry = (scoreEntry: ScoreEntry) => {
+    delete(scoreEntry.updated);
+    delete(scoreEntry.new);
 }
 
-export function saveScoreEntries(game: Game) {
-    
+export const saveScoreEntries = async (scoreEntries: ScoreEntry[]) => {
+    const batch = db.batch();
+
+    // Create all new entries
+    scoreEntries.filter(scoreEntry => scoreEntry.new).forEach(scoreEntry => {
+        cleanScoreEntry(scoreEntry)
+        let newEntryRef = db.collection('scores').doc()
+        batch.set(newEntryRef, scoreEntry)
+    })
+
+    // Update all entries that should be updated
+    scoreEntries.filter(scoreEntry => scoreEntry.updated && !scoreEntry.new).forEach(scoreEntry => {
+        cleanScoreEntry(scoreEntry)
+        let updatedEntryRef = db.collection('scores').doc(scoreEntry.id)
+        batch.set(updatedEntryRef, scoreEntry)
+    })
+
+    await batch.commit()
+}
+
+export const fetchScores = async (gameId: string, hole?: string) => {
+    let scoreObjects;
+    if(hole) {
+        scoreObjects = await db.collection('scores').where('gameId', '==', gameId).where('hole', '==', +hole).get();
+    } else {
+        scoreObjects = await db.collection('scores').where('gameId', '==', gameId).get();
+    }
+    console.log(hole)
+    const scoreEntries: ScoreEntry[] = [];
+    scoreObjects.forEach(scoreObject => {
+        const newObject = {
+            ...scoreObject.data(),
+            id: scoreObject.id,
+            date: new Date(scoreObject.data().date.seconds*1000),
+        }
+        scoreEntries.push(newObject as ScoreEntry)
+    })
+    console.log(scoreEntries)
+    return scoreEntries
 }
