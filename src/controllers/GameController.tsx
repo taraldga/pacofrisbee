@@ -15,11 +15,13 @@ import { Game } from 'types/Game';
 import createInitialScoreEntries from 'helpers/createInitialScoreEntries';
 import Button from '@material-ui/core/Button';
 import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
+import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
+
 
 const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): ScoreEntry[] => {
   if(game) {
     const existingScoreEntries = game.scoreEntries.filter(entry => entry.hole === holeId);
-    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players)
+    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players, game.id ?? '')
   } else {
     return []
   }
@@ -29,10 +31,18 @@ const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): Score
 const GameController: React.FC = () => {
   const { holeId, gameId } = useParams();
   const history = useHistory()
-  const currentGame = fetchGame(gameId)
 
-  const [game, setGame] = React.useState<Game | undefined>(currentGame)
+  const [game, setGame] = React.useState<Game | undefined>(undefined);
+  // const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined); 
   const [showStandings, setShowStandings] = React.useState(false);
+
+  React.useEffect(() => {
+    const setupGame = async () => {
+      const currentGame = await fetchGame(gameId)
+      setGame(currentGame as Game)
+    }
+    setupGame()
+  }, [gameId])
 
   const updateScore = (playerId: string, newScore: number) => {
     let newScoreEntries = game?.scoreEntries.slice();
@@ -62,8 +72,7 @@ const GameController: React.FC = () => {
 
   if(game?.scoreEntries.filter(entry => entry.hole === +holeId).length === 0) {
     if(game) {
-      let generatedScoreEntries = findOrCreateScoreEntries(currentGame, +holeId)
-
+      let generatedScoreEntries = findOrCreateScoreEntries(game, +holeId)
       const newScoreEntries = [...game.scoreEntries, ...generatedScoreEntries]
       
       setGame({
@@ -75,9 +84,9 @@ const GameController: React.FC = () => {
 
   return(
     <div>
-      <h2>Playing a game on {game.field.name}</h2>
+      <h2>{game.field.name}</h2>
       <HoleView players={game.players} holeNumber={+holeId} scoreEntries={game.scoreEntries.filter(entry => entry.hole === +holeId)} updateScoreEntry={updateScore} />
-      <Button className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
+      <Button endIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
       <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} game={game} />
       <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={game.field.holes.length} color="primary" />
     </div>

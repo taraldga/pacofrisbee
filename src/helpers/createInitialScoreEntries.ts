@@ -10,18 +10,20 @@ import { ScoreEntry } from "types/ScoreEntry";
  * @param holeNumber 
  * @param players 
  */
-const createInitialScoreEntries = (field: Field, holeNumber: number, players: Player[]): ScoreEntry[] => {
+const createInitialScoreEntries = (field: Field, holeNumber: number, players: Player[], gameId: string): ScoreEntry[] => {
   return players.map(player => {
     const hole = field.holes[holeNumber-1];
     return {
       date: new Date(),
       field: field.name,
+      gameId: gameId,
       hole: hole.number,
       holePar: hole.par,
       playerId: player.id,
       playerName: player.name,
       score: hole.par,
-      updated: false
+      updated: false,
+      new: true
     }
   })
 }

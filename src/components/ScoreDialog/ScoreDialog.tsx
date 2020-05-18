@@ -10,7 +10,19 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    dialog: {
+      padding: "10px"
+    },
+  }),
+);
 
 export interface ScoreDialogProps {
   game: Game;
@@ -30,6 +42,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   isOpen,
   handleClose
 }) => {
+  const classes = useStyles();
   let scoreBoard = game.players.map(player => {
     let playerScore = game.scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)
     return {
@@ -41,9 +54,10 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   
 
 
-  console.log(isOpen)
   return (
-    <Dialog open={isOpen} onClose={handleClose} TransitionComponent={Transition}>
+    <Dialog  open={isOpen} onClose={handleClose} TransitionComponent={Transition} className={classes.dialog}>
+      <DialogTitle>Current standings</DialogTitle>
+      <DialogContent>
     <TableContainer >
     <Table>
       <TableHead>
@@ -68,7 +82,10 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
       </TableBody>
     </Table>
     </TableContainer>
-    <Button fullWidth variant="contained" color="secondary" size="large" onClick={handleClose}>Close</Button>
+    </DialogContent>
+    <DialogActions>
+      <Button fullWidth variant="contained" color="secondary" size="large" onClick={handleClose}>Close</Button>
+    </DialogActions>
     </Dialog>
   )
 }
