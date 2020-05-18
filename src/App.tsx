@@ -37,23 +37,13 @@ function App() {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       ]
   };
-
   firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+    if (user) {
         setUser(user)
       } else {
         setUser(SignInState.notSignedIn)
       }
   });
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let fields = await getFields()
-      console.log(fields)
-    }
-    fetchData()
-  }, [])
 
   let loginScreenJsx;
   if(user === SignInState.notSignedIn){
