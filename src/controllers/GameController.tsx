@@ -17,17 +17,6 @@ import Button from '@material-ui/core/Button';
 import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
 
-
-const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): ScoreEntry[] => {
-  if(game) {
-    const existingScoreEntries = game.scoreEntries.filter(entry => entry.hole === holeId);
-    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players, game.id ?? '')
-  } else {
-    return []
-  }
-}
-
-
 const GameController: React.FC = () => {
   const { holeId, gameId } = useParams();
   const history = useHistory()
@@ -36,7 +25,7 @@ const GameController: React.FC = () => {
   const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined);
   const [showStandings, setShowStandings] = React.useState(false);
 
-
+  // TODO: Remove this dirty hack and make a proper view.
   const setupScoreEntries = async (initGame?: Game) => {
     const currentGame = game ? game : initGame;
     if(!currentGame) return;
@@ -55,10 +44,12 @@ const GameController: React.FC = () => {
       setupScoreEntries(currentGame)
     }
     setupGame()
+    /* eslint-disable */
   }, [gameId])
 
   React.useEffect(() => {
     setupScoreEntries();
+    /* eslint-disable */
   }, [holeId, gameId])
 
   const updateScore = (playerId: string, newScore: number) => {

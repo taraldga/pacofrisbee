@@ -53,7 +53,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
       }
     }
     setupScoreEntries();
-  }, [isOpen])
+  }, [isOpen, game.id])
   const classes = useStyles();
   let scoreBoard = game.players.map(player => {
     let playerScore = scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)

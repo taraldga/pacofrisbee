@@ -12,10 +12,9 @@ import GameController from './controllers/GameController';
 import GameCreator from './modules/GameCreator/GameCreator'
 import HomeScreen from 'modules/HomeScreen';
 import TopBar from 'components/TopBar/TopBar'
-import React, { useEffect } from 'react';
+import React from 'react';
 import GameOverview from 'modules/GameOverview/GameOverview';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { getFields } from 'data/FrisbeegolfData';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 export enum SignInState {
