@@ -9,7 +9,7 @@ import {
 
 import HoleView from 'components/HoleView/HoleView'
 import { ScoreEntry } from 'types/ScoreEntry'
-import { fetchGame, saveGame } from 'data/FrisbeegolfData';
+import { fetchGame, fetchScores, saveScoreEntries } from 'data/FrisbeegolfData';
 import Pagination from '@material-ui/lab/Pagination';
 import { Game } from 'types/Game';
 import createInitialScoreEntries from 'helpers/createInitialScoreEntries';
@@ -17,75 +17,70 @@ import Button from '@material-ui/core/Button';
 import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
 
-
-const findOrCreateScoreEntries = (game: Game | undefined, holeId: number): ScoreEntry[] => {
-  if(game) {
-    const existingScoreEntries = game.scoreEntries.filter(entry => entry.hole === holeId);
-    return existingScoreEntries.length > 0 ? existingScoreEntries : createInitialScoreEntries(game.field, holeId, game.players, game.id ?? '')
-  } else {
-    return []
-  }
-}
-
-
 const GameController: React.FC = () => {
   const { holeId, gameId } = useParams();
   const history = useHistory()
 
   const [game, setGame] = React.useState<Game | undefined>(undefined);
-  // const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined); 
+  const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined);
   const [showStandings, setShowStandings] = React.useState(false);
+
+  // TODO: Remove this dirty hack and make a proper view.
+  const setupScoreEntries = async (initGame?: Game) => {
+    const currentGame = game ? game : initGame;
+    if(!currentGame) return;
+    const scores = await fetchScores(gameId, holeId)
+    if(scores && scores.length > 0) {
+      setScoreEntries(scores as ScoreEntry[])
+    } else {
+      setScoreEntries(createInitialScoreEntries(currentGame.field, holeId, currentGame.players, gameId))
+    }
+  }
 
   React.useEffect(() => {
     const setupGame = async () => {
-      const currentGame = await fetchGame(gameId)
-      setGame(currentGame as Game)
+      const currentGame: Game = (await fetchGame(gameId) as Game)
+      setGame(currentGame)
+      setupScoreEntries(currentGame)
     }
     setupGame()
+    /* eslint-disable */
   }, [gameId])
 
+  React.useEffect(() => {
+    setupScoreEntries();
+    /* eslint-disable */
+  }, [holeId, gameId])
+
   const updateScore = (playerId: string, newScore: number) => {
-    let newScoreEntries = game?.scoreEntries.slice();
+    let newScoreEntries = scoreEntries?.slice()
     if(newScoreEntries && game) {
       let scoreToUpdate = newScoreEntries.findIndex(entry => (entry.playerId === playerId && entry.hole === +holeId))
       if(scoreToUpdate > -1) {
         newScoreEntries[scoreToUpdate].score = newScore;
-        setGame({
-          ...game,
-          scoreEntries: newScoreEntries
-        })
+        newScoreEntries[scoreToUpdate].updated = true;
+
+        setScoreEntries(newScoreEntries)
       }
     }
 
   }
 
-  const changePage = (nextPage: number) => {
-    if(game) { 
-      saveGame(game);
-      history.push(`/game/${game.id}/${nextPage}`)
+  const changePage = async (nextPage: number) => {
+    if(scoreEntries) { 
+      await saveScoreEntries(scoreEntries);
+      history.push(`/game/${gameId}/${nextPage}`)
     }
   }
 
-  if(!game) {
+  if(!scoreEntries || !game) {
     return null
-  }
-
-  if(game?.scoreEntries.filter(entry => entry.hole === +holeId).length === 0) {
-    if(game) {
-      let generatedScoreEntries = findOrCreateScoreEntries(game, +holeId)
-      const newScoreEntries = [...game.scoreEntries, ...generatedScoreEntries]
-      
-      setGame({
-        ...game,
-        scoreEntries: newScoreEntries
-      })
-    }
   }
 
   return(
     <div>
       <h2>{game.field.name}</h2>
-      <HoleView players={game.players} holeNumber={+holeId} scoreEntries={game.scoreEntries.filter(entry => entry.hole === +holeId)} updateScoreEntry={updateScore} />
+      <HoleView players={game.players} holeNumber={+holeId} scoreEntries={scoreEntries} updateScoreEntry={updateScore} />
       <Button endIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
       <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} game={game} />
       <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={game.field.holes.length} color="primary" />

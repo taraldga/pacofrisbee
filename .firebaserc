@@ -1,6 +1,5 @@
 {
   "projects": {
-    "default": "pacount-d131a",
-    "prod": "pacount-d131a"
+    "default": "pacount-d131a"
   }
 }

@@ -12,10 +12,9 @@ import GameController from './controllers/GameController';
 import GameCreator from './modules/GameCreator/GameCreator'
 import HomeScreen from 'modules/HomeScreen';
 import TopBar from 'components/TopBar/TopBar'
-import React, { useEffect } from 'react';
+import React from 'react';
 import GameOverview from 'modules/GameOverview/GameOverview';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { getFields } from 'data/FrisbeegolfData';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 export enum SignInState {
@@ -37,23 +36,13 @@ function App() {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       ]
   };
-
   firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+    if (user) {
         setUser(user)
       } else {
         setUser(SignInState.notSignedIn)
       }
   });
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let fields = await getFields()
-      console.log(fields)
-    }
-    fetchData()
-  }, [])
 
   let loginScreenJsx;
   if(user === SignInState.notSignedIn){

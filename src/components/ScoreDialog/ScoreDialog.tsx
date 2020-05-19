@@ -14,6 +14,8 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { ScoreEntry } from 'types/ScoreEntry';
+import { fetchScores } from 'data/FrisbeegolfData';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,9 +44,19 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   isOpen,
   handleClose
 }) => {
+  const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[]>([])
+  React.useEffect(() => {
+    const setupScoreEntries = async () => {
+      if(game.id && isOpen) {
+        const scores = await fetchScores(game.id ?? '')
+        setScoreEntries(scores)
+      }
+    }
+    setupScoreEntries();
+  }, [isOpen, game.id])
   const classes = useStyles();
   let scoreBoard = game.players.map(player => {
-    let playerScore = game.scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)
+    let playerScore = scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)
     return {
       id: player.id,
       name: player.name,
