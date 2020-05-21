@@ -16,6 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { ScoreEntry } from 'types/ScoreEntry';
 import { fetchScores } from 'data/FrisbeegolfData';
+import { CenteredLoader } from 'components/CenteredLoader/CenteredLoader';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -70,6 +71,8 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
     <Dialog  open={isOpen} onClose={handleClose} TransitionComponent={Transition} className={classes.dialog}>
       <DialogTitle>Current standings</DialogTitle>
       <DialogContent>
+      {
+        scoreEntries.length > 0 ?
     <TableContainer >
     <Table>
       <TableHead>
@@ -93,7 +96,9 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
         }
       </TableBody>
     </Table>
-    </TableContainer>
+    </TableContainer> : 
+    <CenteredLoader />
+}
     </DialogContent>
     <DialogActions>
       <Button fullWidth variant="contained" color="secondary" size="large" onClick={handleClose}>Close</Button>
