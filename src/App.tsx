@@ -8,7 +8,7 @@ import {
 import firebase from "firebase/app";
 import "firebase/auth";
 
-import GameController from './controllers/GameController';
+import GameController from './modules/GameController/GameController';
 import GameCreator from './modules/GameCreator/GameCreator'
 import HomeScreen from 'modules/HomeScreen';
 import TopBar from 'components/TopBar/TopBar'
