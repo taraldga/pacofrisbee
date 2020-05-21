@@ -157,7 +157,6 @@ export const fetchScores = async (gameId: string, hole?: string) => {
     } else {
         scoreObjects = await db.collection('scores').where('gameId', '==', gameId).get();
     }
-    console.log(hole)
     const scoreEntries: ScoreEntry[] = [];
     scoreObjects.forEach(scoreObject => {
         const newObject = {
