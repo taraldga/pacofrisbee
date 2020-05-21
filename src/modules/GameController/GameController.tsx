@@ -16,6 +16,14 @@ import createInitialScoreEntries from 'helpers/createInitialScoreEntries';
 import Button from '@material-ui/core/Button';
 import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
+import Grid from '@material-ui/core/Grid';
+import Save from '@material-ui/icons/Save'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const GameController: React.FC = () => {
   const { holeId, gameId } = useParams();
@@ -24,6 +32,8 @@ const GameController: React.FC = () => {
   const [game, setGame] = React.useState<Game | undefined>(undefined);
   const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(undefined);
   const [showStandings, setShowStandings] = React.useState(false);
+  const [dirty, setDirty] = React.useState(false)
+  const [showSuccessBar, setShowSuccessBar] = React.useState(false)
 
   // TODO: Remove this dirty hack and make a proper view.
   const setupScoreEntries = async (initGame?: Game) => {
@@ -52,7 +62,9 @@ const GameController: React.FC = () => {
     /* eslint-disable */
   }, [holeId, gameId])
 
+
   const updateScore = (playerId: string, newScore: number) => {
+    setDirty(true)
     let newScoreEntries = scoreEntries?.slice()
     if(newScoreEntries && game) {
       let scoreToUpdate = newScoreEntries.findIndex(entry => (entry.playerId === playerId && entry.hole === +holeId))
@@ -65,11 +77,15 @@ const GameController: React.FC = () => {
     }
 
   }
-
   const changePage = async (nextPage: number) => {
-    if(scoreEntries) { 
+    history.push(`/game/${gameId}/${nextPage}`)
+  }
+
+  const onSave = async () => {
+    if(scoreEntries) {
       await saveScoreEntries(scoreEntries);
-      history.push(`/game/${gameId}/${nextPage}`)
+      setShowSuccessBar(true);
+      setDirty(false)
     }
   }
 
@@ -81,9 +97,22 @@ const GameController: React.FC = () => {
     <div>
       <h2>{game.field.name}</h2>
       <HoleView players={game.players} holeNumber={+holeId} scoreEntries={scoreEntries} updateScoreEntry={updateScore} />
-      <Button endIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
+      <Button disabled={!dirty} type="submit" startIcon={<Save />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => onSave()}>Save scores</Button>
+      <Button startIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
       <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} game={game} />
-      <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={game.field.holes.length} color="primary" />
+      <Snackbar open={showSuccessBar} autoHideDuration={6000} onClose={() => {setShowSuccessBar(false)}}>
+        <Alert onClose={() => {setShowSuccessBar(false)}} severity="success">
+          The scores were saved!
+        </Alert>
+      </Snackbar>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+      >
+        <Pagination page={+holeId} onChange={(_, nextPage) => changePage(nextPage)} count={game.field.holes.length} color="primary" />
+      </Grid>
     </div>
   )
 }

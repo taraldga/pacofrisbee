@@ -3,5 +3,17 @@
   font-weight: bold;
 }
 .number-input>div>input {
-  height: 0px;
+  height: 12px;
+  border: none;
+}
+.button-group>button {
+  border: none !important;
+}
+.button-group>div {
+  border: none !important;
+}
+
+
+.button-group {
+  width: 150px
 }

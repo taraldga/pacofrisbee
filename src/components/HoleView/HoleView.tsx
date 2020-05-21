@@ -2,15 +2,17 @@ import * as React from 'react'
 
 import './HoleView.css'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import PlayerRow from '../PlayerRow'
 import { ScoreEntry } from 'types/ScoreEntry'
 import Player from 'types/Player'
 import TableContainer from '@material-ui/core/TableContainer'
-import TableBody from '@material-ui/core/TableBody'
-import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import NumberInput from 'components/NumberInput/NumberInput';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Divider from '@material-ui/core/Divider';
+
+
 
 export interface HoleViewProps {
   players: Player[];
@@ -24,7 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
     tablecontainer: {
       margin: "0 15px",
       width: "auto",
-      textAlign: "center"
+      textAlign: "center",
+
     },
   }),
 );
@@ -33,34 +36,37 @@ const HoleView: React.FC<HoleViewProps> = ({
   players,
   scoreEntries,
   holeNumber,
-  updateScoreEntry
+  updateScoreEntry,
 }) => {
   const classes = useStyles();
 
+  
   return(
     <div>
       <TableContainer className={classes.tablecontainer}>
       <h3>Hole number {holeNumber} </h3>
-        <Table
-            aria-labelledby="tableTitle"
-            size={false ? 'small' : 'medium'}
-            aria-label="enhanced table"
-            >
-        <TableHead>
-        <TableRow>
-            <TableCell className="table-header-cell">Player Name</TableCell>
-            <TableCell align="center" className="table-header-cell">Score</TableCell>
-          </TableRow>
-        </TableHead>
-            <TableBody>
-            {
-              players.map(player => {
-                const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id)
-                return <PlayerRow name={player.name} score={playerScoreEntry ? playerScoreEntry.score : 0}  updateScoreEntry={(newScore) => updateScoreEntry(player.id, newScore) }/>
-              })
-            }
-            </TableBody>
-        </Table>
+        <List className="score-list">
+          {
+            players.map((player, idx) => {
+              const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id)
+              if(playerScoreEntry) {
+                return (
+                  <>
+                  <ListItem className="list-row">
+                    <ListItemText primary={player.name} />
+                    <ListItemSecondaryAction>
+                      <NumberInput value={playerScoreEntry.score} onChange={(newScore) => updateScoreEntry(player.id, newScore)}/>
+                    </ListItemSecondaryAction>
+                 </ListItem>
+                 {idx < players.length-1 && <Divider />}
+                 </>
+               )
+              } else {
+                return null
+              }
+            })
+          }
+        </List>
       </TableContainer>
 
     </div>
