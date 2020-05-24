@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Game } from 'types/Game'
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import { TransitionProps } from '@material-ui/core/transitions/transition';
@@ -14,9 +13,9 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { ScoreEntry } from 'types/ScoreEntry';
-import { fetchScores } from 'data/FrisbeegolfData';
 import { CenteredLoader } from 'components/CenteredLoader/CenteredLoader';
+import { ScoreEntry } from 'types/ScoreEntry';
+import Player from 'types/Player';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,7 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export interface ScoreDialogProps {
-  game: Game;
+  scoreEntries: ScoreEntry[];
+  players: Player[]
   isOpen: boolean;
   handleClose: () => void
 }
@@ -41,22 +41,13 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const ScoreDialog: React.FC<ScoreDialogProps> = ({
-  game,
+  scoreEntries,
+  players,
   isOpen,
   handleClose
 }) => {
-  const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[]>([])
-  React.useEffect(() => {
-    const setupScoreEntries = async () => {
-      if(game.id && isOpen) {
-        const scores = await fetchScores(game.id ?? '')
-        setScoreEntries(scores)
-      }
-    }
-    setupScoreEntries();
-  }, [isOpen, game.id])
   const classes = useStyles();
-  let scoreBoard = game.players.map(player => {
+  let scoreBoard = players.map(player => {
     let playerScore = scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)
     return {
       id: player.id,

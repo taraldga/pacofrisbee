@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0 15px",
       width: "auto",
       textAlign: "center",
-
     },
   }),
 );

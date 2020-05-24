@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import { Game } from 'types/Game';
+import { GameData } from 'types/Game';
 import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, TableHead } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
@@ -18,7 +18,7 @@ const GameCreator : React.FC = () => {
     let history = useHistory();
     const [fields, setFields] = useState<Field[]>([])
 
-    const [game, setGame] = useState<Game>({
+    const [game, setGame] = useState<GameData>({
         id: uniqid(),
         date: new Date(),
         field: {name: "", holes: []},
@@ -94,7 +94,7 @@ const GameCreator : React.FC = () => {
     
     const isSelected = (playerId: string) => game.players.findIndex(player => player.id === playerId) > -1
 
-    const verifyInput = (game: Game) => {
+    const verifyInput = (game: GameData) => {
         let error: {[key: string]: string} = {};
 
         if( game.field.name === "" ) {
