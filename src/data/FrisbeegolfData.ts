@@ -100,6 +100,11 @@ export const createGame = async (game: GameData) => {
     return newGame;
 }
 
+export const updateGame = async (game: GameData) => {
+    const savedGame = await db.collection('games').doc(game.id).update(game);
+    return savedGame
+}
+
 /**
  * Fetches a game with the given id. Looks first in the cache, and returns from server if nothing is found.
  * @param id The id of the game to be fetched

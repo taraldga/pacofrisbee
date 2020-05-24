@@ -16,7 +16,9 @@ import Button from '@material-ui/core/Button';
 import ScoreDialog from 'components/ScoreDialog/ScoreDialog';
 import EmojiEventsIcon from '@material-ui/icons/EmojiEvents'
 import Grid from '@material-ui/core/Grid';
-import Save from '@material-ui/icons/Save'
+import Save from '@material-ui/icons/Save';
+import Archive from '@material-ui/icons/Archive';
+import Unarchive from '@material-ui/icons/Unarchive';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import Game from 'data/Game';
@@ -80,12 +82,23 @@ const GameController: React.FC = () => {
   if(!game || !scoreEntries) {
     return null
   }
+
+  const finishButtonIcon = game.isFinished() ? <Unarchive /> : <Archive />;
+  const toggleFinished = () => {
+    if(game.isFinished()) {
+      game.openGame()
+    } else {
+      game.finishGame()
+    }
+  }
+
   return(
     <div>
       <h2>{game.getField().name}</h2>
       <HoleView players={game.getPlayers()} holeNumber={+holeId} scoreEntries={scoreEntries} updateScoreEntry={updateScore} />
       <Button disabled={isDataDirty()} type="submit" startIcon={<Save />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => onSave()}>Save scores</Button>
       <Button startIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
+      <Button startIcon={finishButtonIcon} className="standings-button" variant="contained" color="primary" size="large" onClick={toggleFinished}>{game.isFinished() ? "Re-open Game" : "Finish Game"}</Button>
       <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} players={game.getPlayers()} scoreEntries={game.getScoreEntries().filter(entry => !(entry.new || entry.updated))} />
       <Snackbar open={showSuccessBar} autoHideDuration={6000} onClose={() => {setShowSuccessBar(false)}}>
         <Alert onClose={() => {setShowSuccessBar(false)}} severity="success">

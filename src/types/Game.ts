@@ -8,4 +8,5 @@ export interface GameData {
     field: Field
     players: Player[]
     scoreEntries: ScoreEntry[]
+    isFinished?: boolean;
 }

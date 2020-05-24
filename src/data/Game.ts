@@ -2,7 +2,7 @@ import { GameData } from "types/Game";
 import { ScoreEntry } from "types/ScoreEntry";
 import Field from "types/Field";
 import Player from "types/Player";
-import { saveScoreEntries } from "./FrisbeegolfData";
+import { saveScoreEntries, updateGame } from "./FrisbeegolfData";
 import createInitialScoreEntries from "helpers/createInitialScoreEntries";
 
 
@@ -43,6 +43,20 @@ export default class Game {
 
   public getPlayers(): Player[] {
     return this._game.players
+  }
+
+  public finishGame() {
+    this._game.isFinished = true;
+    updateGame(this._game);
+  }
+
+  public openGame() {
+    this._game.isFinished = false;
+    updateGame(this._game)
+  }
+
+  public isFinished() {
+    return this._game.isFinished;
   }
 
 
