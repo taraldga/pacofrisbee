@@ -50,7 +50,7 @@ const GameController: React.FC = () => {
       const newScores = game.getScoreEntries(+holeId)
       setScoreEntries(newScores)
     }
-  }, [holeId])
+  }, [holeId, game])
 
 
   const updateScore = (playerId: string, newScore: number) => {
