@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button'
 import Remove from '@material-ui/icons/Remove'
 import Add from '@material-ui/icons/Add'
 
