@@ -47,6 +47,7 @@ const HoleView: React.FC<HoleViewProps> = ({
         <List className="score-list">
           {
             players.map((player, idx) => {
+
               const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id)
               if(playerScoreEntry) {
                 return (

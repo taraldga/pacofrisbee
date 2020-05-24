@@ -54,7 +54,7 @@ const GameController: React.FC = () => {
 
   const updateScore = (playerId: string, newScore: number) => {
     let newScoreEntries = game?.updateScoreEntry(playerId, +holeId, newScore)
-    setScoreEntries(newScoreEntries)
+    setScoreEntries(game?.getScoreEntries(+holeId))
   }
 
   const changePage = async (nextPage: number) => {
@@ -79,7 +79,6 @@ const GameController: React.FC = () => {
   if(!game || !scoreEntries) {
     return null
   }
-
   return(
     <div>
       <h2>{game.getField().name}</h2>
