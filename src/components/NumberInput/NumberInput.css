@@ -12,6 +12,9 @@
 .button-group>div {
   border: none !important;
 }
+.dirty-score > div > input {
+  color: green !important;
+}
 
 
 .button-group {
