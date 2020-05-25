@@ -22,6 +22,7 @@ import Unarchive from '@material-ui/icons/Unarchive';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import Game from 'data/Game';
+import ScoreTable from 'modules/ScoreTable/ScoreTable';
 
 
 function Alert(props: AlertProps) {
@@ -90,6 +91,15 @@ const GameController: React.FC = () => {
     } else {
       game.finishGame()
     }
+  }
+
+  if(game.isFinished()) {
+    return (
+      <div>
+        <h2>{game.getField().name}</h2>
+        <ScoreTable game={game} />
+      </div>
+    )
   }
 
   return(

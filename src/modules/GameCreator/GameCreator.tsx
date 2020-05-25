@@ -127,49 +127,49 @@ const GameCreator : React.FC = () => {
         <h3>Select players</h3>
         <div className="input-group">
             <TableContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell align="right">Checked</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-
-                {players.map((player, index) => {
-                    const isItemSelected = isSelected(player.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                    return (
-                        <TableRow
-                            hover
-                            onClick={(_) => updatePlayers(player)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={player.id}
-                            selected={isItemSelected}
-                        >
-                        <TableCell align="left">{player.name}</TableCell>
-                        <TableCell align="right" padding="checkbox">
-                            <Checkbox
-                                checked={isItemSelected}
-                                inputProps={{ 'aria-labelledby': labelId }}
-                            />
-                        </TableCell>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Checked</TableCell>
                         </TableRow>
-                    );
-                    })}
-                <TableRow>
-                    <TableCell >
-                        <TextField onChange={(e) => setNewPlayerName(e.target.value)} value={newPlayerName} label="Player Name" variant="standard" />
-                    </TableCell>
-                    <TableCell align="right">
-                        <Button color="default" size="small" variant="contained" onClick={() => addPlayer()} >Add</Button>
-                    </TableCell>
-                </TableRow>
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+
+                    {players.map((player, index) => {
+                        const isItemSelected = isSelected(player.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                            <TableRow
+                                hover
+                                onClick={(_) => updatePlayers(player)}
+                                role="checkbox"
+                                aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={player.id}
+                                selected={isItemSelected}
+                            >
+                            <TableCell align="left">{player.name}</TableCell>
+                            <TableCell align="right" padding="checkbox">
+                                <Checkbox
+                                    checked={isItemSelected}
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                />
+                            </TableCell>
+                            </TableRow>
+                        );
+                        })}
+                    <TableRow>
+                        <TableCell >
+                            <TextField onChange={(e) => setNewPlayerName(e.target.value)} value={newPlayerName} label="Player Name" variant="standard" />
+                        </TableCell>
+                        <TableCell align="right">
+                            <Button color="default" size="small" variant="contained" onClick={() => addPlayer()} >Add</Button>
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
             </TableContainer>
         </div>
         <div className="input-group">
