@@ -45,6 +45,10 @@ export default class Game {
     return this._game.players
   }
 
+  public getId(): string {
+    return this._game.id ?? '';
+  }
+
   public finishGame() {
     this._game.isFinished = true;
     updateGame(this._game);
