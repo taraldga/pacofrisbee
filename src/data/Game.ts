@@ -3,7 +3,7 @@ import { ScoreEntry } from "types/ScoreEntry";
 import Field from "types/Field";
 import Player from "types/Player";
 import { saveScoreEntries, updateGame } from "./FrisbeegolfData";
-import createInitialScoreEntries from "helpers/createInitialScoreEntries";
+import createInitialScoreEntries from "util/createInitialScoreEntries";
 
 
 

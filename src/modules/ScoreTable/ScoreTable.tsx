@@ -11,6 +11,7 @@ import Player from "types/Player";
 import { Hole } from "types/Field";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
+import { findScoreForPlayer } from "util/findScoreForPlayer";
 
 interface ScoreTableRowProps {
   hole: Hole; 
@@ -59,8 +60,8 @@ const ScoreTable : React.FC<ScoreTableProps> = ({
       <Table size="small">
       <TableHead>
         <TableRow>
-          <TableCell>Hole</TableCell>
-          <TableCell>Par</TableCell>
+          <TableCell className="sum-cell">Hole</TableCell>
+          <TableCell className="sum-cell">Par</TableCell>
           {
             game?.getPlayers().map(player => {
               return <TableCell align="right">{player.name}</TableCell>
@@ -69,6 +70,13 @@ const ScoreTable : React.FC<ScoreTableProps> = ({
         </TableRow>
       </TableHead>
       <TableBody>
+      <TableRow>
+        <TableCell>Sum</TableCell>
+        <TableCell>{game?.getField().holes.reduce((curr, acc) => curr + acc.par, 0)}</TableCell>
+        {game?.getPlayers().map(player => {
+          return <TableCell align="right">{findScoreForPlayer(game?.getScoreEntries(), player.id)}</TableCell>
+        })}
+      </TableRow>
       {
         game?.getField().holes.map(hole => {
           return(
