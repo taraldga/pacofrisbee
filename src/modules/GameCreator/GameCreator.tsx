@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import { Game } from 'types/Game';
+import { GameData } from 'types/Game';
 import InputLabel from '@material-ui/core/InputLabel';
 import { MenuItem, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, TableHead } from '@material-ui/core';
 import Select from '@material-ui/core/Select';
@@ -18,7 +18,7 @@ const GameCreator : React.FC = () => {
     let history = useHistory();
     const [fields, setFields] = useState<Field[]>([])
 
-    const [game, setGame] = useState<Game>({
+    const [game, setGame] = useState<GameData>({
         id: uniqid(),
         date: new Date(),
         field: {name: "", holes: []},
@@ -94,7 +94,7 @@ const GameCreator : React.FC = () => {
     
     const isSelected = (playerId: string) => game.players.findIndex(player => player.id === playerId) > -1
 
-    const verifyInput = (game: Game) => {
+    const verifyInput = (game: GameData) => {
         let error: {[key: string]: string} = {};
 
         if( game.field.name === "" ) {
@@ -127,49 +127,49 @@ const GameCreator : React.FC = () => {
         <h3>Select players</h3>
         <div className="input-group">
             <TableContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell align="right">Checked</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-
-                {players.map((player, index) => {
-                    const isItemSelected = isSelected(player.id);
-                    const labelId = `enhanced-table-checkbox-${index}`;
-
-                    return (
-                        <TableRow
-                            hover
-                            onClick={(_) => updatePlayers(player)}
-                            role="checkbox"
-                            aria-checked={isItemSelected}
-                            tabIndex={-1}
-                            key={player.id}
-                            selected={isItemSelected}
-                        >
-                        <TableCell align="left">{player.name}</TableCell>
-                        <TableCell align="right" padding="checkbox">
-                            <Checkbox
-                                checked={isItemSelected}
-                                inputProps={{ 'aria-labelledby': labelId }}
-                            />
-                        </TableCell>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell align="right">Checked</TableCell>
                         </TableRow>
-                    );
-                    })}
-                <TableRow>
-                    <TableCell >
-                        <TextField onChange={(e) => setNewPlayerName(e.target.value)} value={newPlayerName} label="Player Name" variant="standard" />
-                    </TableCell>
-                    <TableCell align="right">
-                        <Button color="default" size="small" variant="contained" onClick={() => addPlayer()} >Add</Button>
-                    </TableCell>
-                </TableRow>
-                </TableBody>
-            </Table>
+                    </TableHead>
+                    <TableBody>
+
+                    {players.map((player, index) => {
+                        const isItemSelected = isSelected(player.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                            <TableRow
+                                hover
+                                onClick={(_) => updatePlayers(player)}
+                                role="checkbox"
+                                aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={player.id}
+                                selected={isItemSelected}
+                            >
+                            <TableCell align="left">{player.name}</TableCell>
+                            <TableCell align="right" padding="checkbox">
+                                <Checkbox
+                                    checked={isItemSelected}
+                                    inputProps={{ 'aria-labelledby': labelId }}
+                                />
+                            </TableCell>
+                            </TableRow>
+                        );
+                        })}
+                    <TableRow>
+                        <TableCell >
+                            <TextField onChange={(e) => setNewPlayerName(e.target.value)} value={newPlayerName} label="Player Name" variant="standard" />
+                        </TableCell>
+                        <TableCell align="right">
+                            <Button color="default" size="small" variant="contained" onClick={() => addPlayer()} >Add</Button>
+                        </TableCell>
+                    </TableRow>
+                    </TableBody>
+                </Table>
             </TableContainer>
         </div>
         <div className="input-group">

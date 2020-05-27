@@ -1,0 +1,8 @@
+.paper-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.sum-cell {
+  font-weight: 700;
+}

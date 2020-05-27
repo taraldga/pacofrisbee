@@ -10,7 +10,7 @@ import SendIcon from '@material-ui/icons/Send';
 import format from 'date-fns/format';
 import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom';
-import { Game } from 'types/Game';
+import { GameData } from 'types/Game';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 
 const GameOverview = () => {
-  const [games, setGames] = React.useState<Game[] | undefined>(undefined)
+  const [games, setGames] = React.useState<GameData[] | undefined>(undefined)
   React.useEffect(() => {
     const setupGames = async () => {
       let games = await getGames();
@@ -39,7 +39,7 @@ const GameOverview = () => {
       <h2 className={classes.header}>My played games</h2>
       <List className={classes.root}>
         {
-          games?.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: Game, idx: number) => {
+          games?.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: GameData, idx: number) => {
             return (
               <>
                 <Link to={`/game/${game.id}/1`}>

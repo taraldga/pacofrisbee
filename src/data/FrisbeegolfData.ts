@@ -1,5 +1,5 @@
 import Field from "types/Field"
-import { Game } from "types/Game";
+import { GameData } from "types/Game";
 import Player from "types/Player";
 import firebase from "firebase";
 import { ScoreEntry } from "types/ScoreEntry";
@@ -79,14 +79,14 @@ export const getPlayers = async () => {
  */
 export const getGames = async ()  =>  {
     const firebaseObject = await db.collection('games').get()
-    const games: Game[] = [];
+    const games: GameData[] = [];
     firebaseObject.forEach(gameObject => {
         const newObject = {
             ...gameObject.data(),
             id: gameObject.id,
             date: new Date(gameObject.data().date.seconds*1000),
         }
-        games.push(newObject as Game)
+        games.push(newObject as GameData)
     })
     return games;
 }
@@ -95,9 +95,14 @@ export const getGames = async ()  =>  {
  * Creates a new game on the server
  * @param game The game to save
  */
-export const createGame = async (game: Game) => {
+export const createGame = async (game: GameData) => {
     const newGame = await db.collection('games').add(game);
     return newGame;
+}
+
+export const updateGame = async (game: GameData) => {
+    const savedGame = await db.collection('games').doc(game.id).update(game);
+    return savedGame
 }
 
 /**

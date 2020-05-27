@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0 15px",
       width: "auto",
       textAlign: "center",
-
     },
   }),
 );
@@ -40,7 +39,7 @@ const HoleView: React.FC<HoleViewProps> = ({
 }) => {
   const classes = useStyles();
 
-  
+  const isDirty = (scoreEntry: ScoreEntry) => (scoreEntry.new || scoreEntry.updated);
   return(
     <div>
       <TableContainer className={classes.tablecontainer}>
@@ -48,6 +47,7 @@ const HoleView: React.FC<HoleViewProps> = ({
         <List className="score-list">
           {
             players.map((player, idx) => {
+
               const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id)
               if(playerScoreEntry) {
                 return (
@@ -55,7 +55,7 @@ const HoleView: React.FC<HoleViewProps> = ({
                   <ListItem className="list-row">
                     <ListItemText primary={player.name} />
                     <ListItemSecondaryAction>
-                      <NumberInput value={playerScoreEntry.score} onChange={(newScore) => updateScoreEntry(player.id, newScore)}/>
+                      <NumberInput isDirty={!!isDirty(playerScoreEntry)} value={playerScoreEntry.score} onChange={(newScore) => updateScoreEntry(player.id, newScore)}/>
                     </ListItemSecondaryAction>
                  </ListItem>
                  {idx < players.length-1 && <Divider />}
