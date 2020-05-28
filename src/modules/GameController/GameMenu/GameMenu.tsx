@@ -14,7 +14,7 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
   let history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
+  const [finishDialogOpen, setFinishDialogOpen] = React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,7 +26,7 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
 
   const openArchivePopup = () => {
     setAnchorEl(null);
-    setArchiveDialogOpen(true)
+    setFinishDialogOpen(true)
   }
 
   const handleArchivePressed = async () => {
@@ -36,7 +36,7 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
 
   return (
     <div>
-      {archiveDialogOpen && <FeedbackDialog open={archiveDialogOpen} title="Archive game" content="Are you sure you want to archive the game?" onAgree={handleArchivePressed} onClose={() => setArchiveDialogOpen(false)} /> }
+      {finishDialogOpen && <FeedbackDialog open={finishDialogOpen} title="Finish game" content="Are you sure you want to finish the game?" onAgree={handleArchivePressed} onClose={() => setFinishDialogOpen(false)} /> }
       <IconButton
         aria-label="more"
         aria-controls="long-menu"
