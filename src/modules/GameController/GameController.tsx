@@ -36,6 +36,7 @@ const GameController: React.FC = () => {
   const [scoreEntries, setScoreEntries] = React.useState<ScoreEntry[] | undefined>(game?.getScoreEntries());
   const [showStandings, setShowStandings] = React.useState(false);
   const [showSuccessBar, setShowSuccessBar] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false)
 
   React.useEffect(() => {
     const setupGame = async () => {
@@ -59,15 +60,17 @@ const GameController: React.FC = () => {
     game?.updateScoreEntry(playerId, +holeId, newScore)
     setScoreEntries(game?.getScoreEntries(+holeId))
   }
-
+  
   const changePage = async (nextPage: number) => {
     history.push(`/game/${gameId}/${nextPage}`)
   }
-
+  
   const onSave = async () => {
     if(game) {
+      setIsSaving(true)
       await game.saveScoreEntries(+holeId);
       setShowSuccessBar(true);
+      setIsSaving(false);
     }
   }
 
@@ -97,7 +100,7 @@ const GameController: React.FC = () => {
       <h2>{game.getField().name}</h2>
       <GameMenu game={game} />
       <HoleView players={game.getPlayers()} holeNumber={+holeId} scoreEntries={scoreEntries} updateScoreEntry={updateScore} />
-      <Button disabled={isDataDirty()} type="submit" startIcon={<Save />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => onSave()}>Save scores</Button>
+      <Button disabled={isDataDirty() || isSaving} type="submit" startIcon={<Save />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => onSave()}>Save scores</Button>
       <Button startIcon={<EmojiEventsIcon />} className="standings-button" variant="contained" color="primary" size="large" onClick={() => setShowStandings(true)}>View Standings</Button>
       <ScoreDialog isOpen={showStandings} handleClose={() => setShowStandings(false)} players={game.getPlayers()} scoreEntries={game.getScoreEntries().filter(entry => !(entry.new || entry.updated))} />
       <Snackbar open={showSuccessBar} autoHideDuration={6000} onClose={() => {setShowSuccessBar(false)}}>

@@ -1,7 +1,7 @@
 import Field from "types/Field"
 import { GameData } from "types/Game";
 import Player from "types/Player";
-import firebase from "firebase";
+import { initializeApp, firestore } from "firebase";
 import { ScoreEntry } from "types/ScoreEntry";
 
 // Initialize firebase 
@@ -15,10 +15,10 @@ const firebaseConfig = {
     appId: "1:164274232100:web:8f42eb0afee2a473b9f1b1",
     measurementId: "G-KQKTCY6Y4V"
 };
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+initializeApp(firebaseConfig);
+// firebase.analytics();
 
-const db = firebase.firestore();
+const db = firestore();
 
 
 export const getFields = async () => {

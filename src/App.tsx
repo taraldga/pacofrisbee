@@ -5,8 +5,7 @@ import {
   BrowserRouter as Router,
   Switch
 } from "react-router-dom";
-import firebase from "firebase/app";
-import "firebase/auth";
+import { auth } from "firebase/app";
 
 import GameController from './modules/GameController/GameController';
 import GameCreator from './modules/GameCreator/GameCreator'
@@ -33,10 +32,10 @@ function App() {
       signInSuccessUrl: '/',
       // We will display Google and Facebook as auth providers.
       signInOptions: [
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      auth.GoogleAuthProvider.PROVIDER_ID,
       ]
   };
-  firebase.auth().onAuthStateChanged(function(user) {
+  auth().onAuthStateChanged(function(user) {
     if (user) {
         setUser(user)
       } else {
@@ -46,7 +45,7 @@ function App() {
 
   let loginScreenJsx;
   if(user === SignInState.notSignedIn){
-    loginScreenJsx = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+    loginScreenJsx = <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth()}/>
   } else if(user === SignInState.waiting) {
     loginScreenJsx = <CircularProgress />
   }
