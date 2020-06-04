@@ -59,10 +59,17 @@ export default class Game {
     updateGame(this._game)
   }
 
+  /**
+   * Returns true if the game is finished, false else.
+   */
   public isFinished() {
-    return this._game.isFinished;
+    return !!this._game.isFinished;
   }
 
+  //Removes the game and all scores connected to it.
+  public deleteGame() {
+
+  }
 
   /**
    * Get either all scoreentries, or scoreentries from the given hole.
