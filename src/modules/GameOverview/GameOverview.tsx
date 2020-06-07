@@ -11,6 +11,7 @@ import format from 'date-fns/format';
 import Divider from '@material-ui/core/Divider';
 import { Link } from 'react-router-dom';
 import { GameData } from 'types/Game';
+import Player from 'types/Player';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +35,11 @@ const GameOverview = () => {
     setupGames();
   }, [])
   let classes = useStyles()
+
+  const listplayers = (players: Player[]) => {
+    return players.map(player => player.name.split(" ")[0]).join(", ")
+  }
+
   return (
     <div>
       <h2 className={classes.header}>My played games</h2>
@@ -44,7 +50,7 @@ const GameOverview = () => {
               <>
                 <Link to={`/game/${game.id}/1`}>
                 <ListItem>
-                  <ListItemText primary={game.field.name} secondary={format(game.date, "dd.MM.yyyy")} />
+                  <ListItemText primary={game.field.name} secondary={`${format(game.date, "dd.MM.yyyy")}  -    ${listplayers(game.players)}` } />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
                       <SendIcon />
