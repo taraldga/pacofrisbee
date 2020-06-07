@@ -43,7 +43,6 @@ const HoleView: React.FC<HoleViewProps> = ({
   return(
     <div>
       <TableContainer className={classes.tablecontainer}>
-      <h3>Hole number {holeNumber} </h3>
         <List className="score-list">
           {
             players.map((player, idx) => {

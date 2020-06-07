@@ -194,8 +194,8 @@ class GameController extends React.Component<
 
     return (
       <div>
-        <h2>{game.field.name}</h2>
         <GameMenu onArchiveGame={() => {this.finishGame()}} />
+        <h2>{game.field.name} - Hole Number {this.state.currentHole}</h2>
         <HoleView
           players={game.players}
           holeNumber={this.state.currentHole}
