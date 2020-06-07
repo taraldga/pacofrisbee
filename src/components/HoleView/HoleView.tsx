@@ -35,7 +35,7 @@ const HoleView: React.FC<HoleViewProps> = ({
   players,
   scoreEntries,
   holeNumber,
-  updateScoreEntry,
+  updateScoreEntry
 }) => {
   const classes = useStyles();
 
@@ -47,8 +47,8 @@ const HoleView: React.FC<HoleViewProps> = ({
         <List className="score-list">
           {
             players.map((player, idx) => {
-
-              const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id)
+              const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id) as ScoreEntry;
+              console.log(playerScoreEntry)
               if(playerScoreEntry) {
                 return (
                   <>

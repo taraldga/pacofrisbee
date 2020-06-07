@@ -21,10 +21,12 @@ interface DialogProps {
   content: string;
   onAgree: () => void;
   onClose: () => void;
+  dangerous?: boolean;
 }
 
 export  const  FeedbackDialog : React.FC<DialogProps> = ({
   open,
+  dangerous,
   title,
   content,
   onAgree,

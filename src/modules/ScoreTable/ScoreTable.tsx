@@ -1,6 +1,5 @@
 import * as React from "react";
 import { ScoreEntry } from "types/ScoreEntry";
-import Game from "data/Game";
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,6 +11,7 @@ import { Hole } from "types/Field";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import { findScoreForPlayer } from "util/findScoreForPlayer";
+import { GameData } from "types/Game";
 
 interface ScoreTableRowProps {
   hole: Hole; 
@@ -48,7 +48,7 @@ const ScoreTableRow: React.FC<ScoreTableRowProps> = ({
 }
 
 export interface ScoreTableProps {
-  game: Game;
+  game: GameData;
 }
 
 const ScoreTable : React.FC<ScoreTableProps> = ({
@@ -63,7 +63,7 @@ const ScoreTable : React.FC<ScoreTableProps> = ({
           <TableCell className="sum-cell">Hole</TableCell>
           <TableCell className="sum-cell">Par</TableCell>
           {
-            game?.getPlayers().map(player => {
+            game.players.map(player => {
               return <TableCell align="right">{player.name}</TableCell>
             })
           }
@@ -72,18 +72,18 @@ const ScoreTable : React.FC<ScoreTableProps> = ({
       <TableBody>
       <TableRow>
         <TableCell>Sum</TableCell>
-        <TableCell>{game?.getField().holes.reduce((curr, acc) => curr + acc.par, 0)}</TableCell>
-        {game?.getPlayers().map(player => {
-          return <TableCell align="right">{findScoreForPlayer(game?.getScoreEntries(), player.id)}</TableCell>
+        <TableCell>{game.field.holes.reduce((curr, acc) => curr + acc.par, 0)}</TableCell>
+        {game.players.map(player => {
+          return <TableCell align="right">{findScoreForPlayer(game.scoreEntries, player.id)}</TableCell>
         })}
       </TableRow>
       {
-        game?.getField().holes.map(hole => {
+        game.field.holes.map(hole => {
           return(
             <ScoreTableRow 
-              players={game?.getPlayers()} 
+              players={game.players} 
               hole={hole}
-              scoreEntries={game?.getScoreEntries().filter(entry => entry.hole === hole.number)} />
+              scoreEntries={game.scoreEntries.filter(entry => entry.hole === hole.number)} />
           )
         })
       }

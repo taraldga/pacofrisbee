@@ -5,16 +5,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Archive from '@material-ui/icons/Archive';
 import { FeedbackDialog } from 'components/FeedbackDialog/FeedbackDialog';
-import Game from 'data/Game';
-import { useHistory } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 
-export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
-  let history = useHistory();
+export const GameMenu: React.FC<{onArchiveGame: () => void}> = React.memo(({onArchiveGame}) =>  {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [archiveDialogOpen, setArchiveDialogOpen] = React.useState(false);
+  const [finishDialogOpen, setFinishDialogOpen] = React.useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,17 +23,16 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
 
   const openArchivePopup = () => {
     setAnchorEl(null);
-    setArchiveDialogOpen(true)
+    setFinishDialogOpen(true)
   }
 
-  const handleArchivePressed = async () => {
-    await game.finishGame()
-    history.push(`/game/${game.getId()}/${1}`)
+  const handleArchivePressed = () => {
+    onArchiveGame()
   }
 
   return (
     <div>
-      {archiveDialogOpen && <FeedbackDialog open={archiveDialogOpen} title="Archive game" content="Are you sure you want to archive the game?" onAgree={handleArchivePressed} onClose={() => setArchiveDialogOpen(false)} /> }
+      {finishDialogOpen && <FeedbackDialog open={finishDialogOpen} title="Finish game" content="Are you sure you want to finish the game?" onAgree={handleArchivePressed} onClose={() => setFinishDialogOpen(false)} /> }
       <IconButton
         aria-label="more"
         aria-controls="long-menu"
@@ -65,4 +61,4 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
       </Menu>
     </div>
   );
-}
+})
