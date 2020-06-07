@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getFields, getPlayers, createGame, savePlayer } from 'data/FrisbeegolfData';
+import { getFields, getPlayers, createGame, savePlayer} from 'data/FrisbeegolfData';
 import { useHistory } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
@@ -75,6 +75,7 @@ const GameCreator : React.FC = () => {
         let error = verifyInput(game);
         if(Object.keys(error).length === 0 && error.constructor === Object) {
             let dbGame = await createGame(game)
+            console.log(dbGame)
             history.push(`/game/${dbGame.id}/${1}`)
         } else {
             setError(error)

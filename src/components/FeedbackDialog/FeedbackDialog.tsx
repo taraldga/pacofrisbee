@@ -32,7 +32,6 @@ export  const  FeedbackDialog : React.FC<DialogProps> = ({
   onAgree,
   onClose
 })  => {
-  const color = dangerous ? "red" : "primary"
   return (
     <Dialog
       open={open}

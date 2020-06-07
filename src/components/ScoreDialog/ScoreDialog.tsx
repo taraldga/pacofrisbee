@@ -46,7 +46,11 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   isOpen,
   handleClose
 }) => {
+
   const classes = useStyles();
+  if(!isOpen) {
+    return null
+  }
   let scoreBoard = players.map(player => {
     let playerScore = scoreEntries.filter(entry => entry.playerId === player.id).reduce((acc, curr) => acc + curr.score, 0)
     return {
@@ -57,7 +61,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   }).sort((a,b) => a.totalScore - b.totalScore)
   
 
-
+  console.log(scoreEntries)
   return (
     <Dialog  open={isOpen} onClose={handleClose} TransitionComponent={Transition} className={classes.dialog}>
       <DialogTitle>Current standings</DialogTitle>

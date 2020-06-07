@@ -10,7 +10,7 @@ import { ScoreEntry } from "types/ScoreEntry";
  * @param holeNumber 
  * @param players 
  */
-const createInitialScoreEntries = (field: Field, holeNumber: number, players: Player[], gameId: string): ScoreEntry[] => {
+export const createInitialScoreEntries = (field: Field, holeNumber: number, players: Player[], gameId: string): ScoreEntry[] => {
   return players.map(player => {
     const hole = field.holes[holeNumber-1];
     return {
@@ -27,5 +27,3 @@ const createInitialScoreEntries = (field: Field, holeNumber: number, players: Pl
     }
   })
 }
-
-export default createInitialScoreEntries;

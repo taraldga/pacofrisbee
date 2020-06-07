@@ -5,13 +5,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Archive from '@material-ui/icons/Archive';
 import { FeedbackDialog } from 'components/FeedbackDialog/FeedbackDialog';
-import Game from 'data/Game';
-import { useHistory } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 
-export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
-  let history = useHistory();
+export const GameMenu: React.FC<{onArchiveGame: () => void}> = React.memo(({onArchiveGame}) =>  {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [finishDialogOpen, setFinishDialogOpen] = React.useState(false);
@@ -29,9 +26,8 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
     setFinishDialogOpen(true)
   }
 
-  const handleArchivePressed = async () => {
-    await game.finishGame()
-    history.push(`/game/${game.getId()}/${1}`)
+  const handleArchivePressed = () => {
+    onArchiveGame()
   }
 
   return (
@@ -65,4 +61,4 @@ export const GameMenu: React.FC<{game: Game}> = ({game}) =>  {
       </Menu>
     </div>
   );
-}
+})
