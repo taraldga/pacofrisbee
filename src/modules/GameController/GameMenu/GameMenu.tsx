@@ -31,7 +31,7 @@ export const GameMenu: React.FC<{onArchiveGame: () => void}> = React.memo(({onAr
   }
 
   return (
-    <div>
+    <div style={{position: 'absolute', right: 0 }}>
       {finishDialogOpen && <FeedbackDialog open={finishDialogOpen} title="Finish game" content="Are you sure you want to finish the game?" onAgree={handleArchivePressed} onClose={() => setFinishDialogOpen(false)} /> }
       <IconButton
         aria-label="more"

@@ -7,9 +7,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 
-
-
-
 const TopBar : React.FC = () => {
   return (
     <AppBar position="static">
