@@ -147,19 +147,22 @@ class GameController extends React.Component<
       this.setState({
         isSaving: true,
       });
-      await saveScore(this.state.game);
-      let newScores = [...this.state.game.scoreEntries]; 
+      let newScores = [...this.state.game.scoreEntries];
       newScores.forEach(scoreEntry => {
-        scoreEntry.updated = false;
-        scoreEntry.new = false;
+        if(scoreEntry.hole === this.state.currentHole) {
+          scoreEntry.updated = false;
+          scoreEntry.new = false;
+        }
       })
+      const newGame: GameData = {
+        ...this.state.game,
+        scoreEntries: newScores
+      }
+      await saveScore(newGame);
       this.setState({
         isSaving: false,
         showSuccessBar: true,
-        game: {
-          ...this.state.game,
-          scoreEntries: newScores
-        }
+        game: newGame
       });
     }
   }
@@ -191,7 +194,7 @@ class GameController extends React.Component<
         </div>
       );
     }
-
+    console.log(game.scoreEntries)
     return (
       <div>
         <GameMenu onArchiveGame={() => {this.finishGame()}} />
