@@ -2,3 +2,6 @@
   margin: 10px 0;
 }
 
+.is-dirty span {
+  font-weight: 700;
+}

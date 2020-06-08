@@ -9,4 +9,5 @@ export interface Hole {
   id?: string;
   number: number;
   par: number;
+  isPlayed?: boolean;
 }
