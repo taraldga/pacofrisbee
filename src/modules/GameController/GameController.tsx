@@ -7,7 +7,6 @@ import { withRouter } from "react-router-dom";
 
 import HoleView from "components/HoleView/HoleView";
 import { fetchGame, saveScore, updateGame } from "data/FrisbeegolfData";
-import Pagination from "@material-ui/lab/Pagination";
 import { GameData } from "types/Game";
 import Button from "@material-ui/core/Button";
 import ScoreDialog from "components/ScoreDialog/ScoreDialog";
@@ -19,6 +18,9 @@ import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import ScoreTable from "modules/ScoreTable/ScoreTable";
 import { GameMenu } from "./GameMenu/GameMenu";
 import { createInitialScoreEntries } from "util/createInitialScoreEntries";
+import HoleNavigation from "components/HoleNavigation/HoleNavigation";
+import { ScoreEntry } from "types/ScoreEntry";
+import Field from "types/Field";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -28,10 +30,11 @@ export interface GameControllerState {
   gameId: string;
   currentHole: number;
   numberOfHoles?: number;
-  game?: GameData;
   isSaving?: boolean;
   showStandings?: boolean;
   showSuccessBar?: boolean;
+  game?: GameData;
+  currentScoreEntries?: ScoreEntry[];
 }
 // Type whatever you expect in 'this.props.match.params.*'
 type PathParamsType = {
@@ -59,13 +62,19 @@ class GameController extends React.Component<
     this.setupGame(this.state.gameId, this.state.currentHole);
   }
 
-  public componentDidUpdate(prevProps: GameControllerProps, prevState: GameControllerState) {
-    const {gameId, holeId} = this.props.match.params;
-    if(this.state.gameId !== this.props.match.params.gameId || this.state.currentHole !== +this.props.match.params.holeId) {
+  public componentDidUpdate(
+    prevProps: GameControllerProps,
+    prevState: GameControllerState
+  ) {
+    const { gameId, holeId } = this.props.match.params;
+    if (
+      this.state.gameId !== this.props.match.params.gameId ||
+      this.state.currentHole !== +this.props.match.params.holeId
+    ) {
       this.setState({
         gameId: gameId,
-        currentHole: +holeId
-      })
+        currentHole: +holeId,
+      });
       this.setupGame(gameId, +holeId);
     }
   }
@@ -77,28 +86,21 @@ class GameController extends React.Component<
     } else {
       currentGame = this.state.game;
     }
-    if (
-      !currentGame.scoreEntries.some(
-        (scoreEntry) => scoreEntry.hole === currentHole
-      )
-    ) {
-      const initialScoreEntries = createInitialScoreEntries(
+    let currentScores = currentGame.scoreEntries.filter(
+      (scoreEntry) => scoreEntry.hole === currentHole
+    );
+    if (currentScores.length === 0) {
+      currentScores = createInitialScoreEntries(
         currentGame.field,
         currentHole,
         currentGame.players,
         gameId
       );
-      currentGame = {
-        ...currentGame,
-        scoreEntries: [
-          ...currentGame.scoreEntries,
-          ...initialScoreEntries,
-        ],
-      };
     }
     this.setState({
       game: currentGame,
       numberOfHoles: currentGame.field.holes.length,
+      currentScoreEntries: currentScores
     });
   }
 
@@ -108,33 +110,40 @@ class GameController extends React.Component<
    * @param newScore The new score to set on the updated scoreenry
    */
   private updateScoreEntry(playerId: string, hole: number, newScore: number) {
-    if (!this.state.game) {
+    if (!this.state.game || !this.state.currentScoreEntries) {
       return;
     }
 
-    const newScoreEntries = [...this.state.game.scoreEntries];
-    let scoreToUpdate = newScoreEntries.findIndex(
+    const updatedScoreEntries = [...this.state.currentScoreEntries];
+    let scoreToUpdate = updatedScoreEntries.findIndex(
       (entry) => entry.playerId === playerId && entry.hole === hole
     );
     if (scoreToUpdate > -1) {
-      newScoreEntries[scoreToUpdate].score = newScore;
-      newScoreEntries[scoreToUpdate].updated = true;
-      const newGame =  {
-        ...this.state.game,
-        scoreEntries: newScoreEntries,
-      }
+      updatedScoreEntries[scoreToUpdate].score = newScore;
+      updatedScoreEntries[scoreToUpdate].updated = true;
       this.setState({
-        game: newGame,
+        currentScoreEntries: updatedScoreEntries,
       });
-      return newScoreEntries;
     }
   }
 
   private isDataDirty = () => {
-    return this.state.game?.scoreEntries.some(
-      (scoreEntry) => scoreEntry.new || scoreEntry.updated
-    );
+    if(this.state.currentScoreEntries) {
+      return this.state.currentScoreEntries
+      .filter((entry) => entry.hole === this.state.currentHole)
+      .some((scoreEntry) => scoreEntry.new || scoreEntry.updated);
+    }
+    return false;
   };
+
+  private isPaginationDisabled = () => {
+    if(this.state.currentScoreEntries) {
+      return this.state.currentScoreEntries
+      .filter((entry) => entry.hole === this.state.currentHole)
+      .some((scoreEntry) => scoreEntry.updated);
+    }
+    return false;
+  }
 
   private toggleShowStandings() {
     this.setState({
@@ -142,46 +151,57 @@ class GameController extends React.Component<
     });
   }
 
+  private markHoleAsSaved(field: Field, holeNumber: number) {
+    const updatedHoles = [...field.holes];
+    updatedHoles[holeNumber-1].isPlayed = true
+    return {
+      ...field,
+      holes: updatedHoles
+    }
+  }
+
   private async onSave() {
-    if (this.state.game) {
+    if (this.state.game && this.state.currentScoreEntries) {
       this.setState({
         isSaving: true,
       });
-      let newScores = [...this.state.game.scoreEntries];
-      newScores.forEach(scoreEntry => {
-        if(scoreEntry.hole === this.state.currentHole) {
+      let newScores = [...this.state.game.scoreEntries, ...this.state.currentScoreEntries];
+      newScores.forEach((scoreEntry) => {
+        if (scoreEntry.hole === this.state.currentHole) {
           scoreEntry.updated = false;
           scoreEntry.new = false;
         }
-      })
+      });
+      const updatedField = this.markHoleAsSaved(this.state.game.field, this.state.currentHole);
       const newGame: GameData = {
         ...this.state.game,
-        scoreEntries: newScores
-      }
+        scoreEntries: newScores,
+        field: updatedField
+      };
       await saveScore(newGame);
       this.setState({
         isSaving: false,
         showSuccessBar: true,
-        game: newGame
+        game: newGame,
       });
     }
   }
 
   private finishGame() {
-    if(this.state.game) {
+    if (this.state.game) {
       let newGame = this.state.game;
       newGame.isFinished = true;
-      updateGame(newGame)
-      this.props.history.push(`/game/${this.state.gameId}/1`)
+      updateGame(newGame);
+      this.props.history.push(`/game/${this.state.gameId}/1`);
     }
   }
 
   public render() {
     const changePage = async (nextPage: number) => {
-       this.props.history.push(`/game/${this.state.gameId}/${nextPage}`)
+      this.props.history.push(`/game/${this.state.gameId}/${nextPage}`);
     };
 
-    if (!this.state.game) {
+    if (!this.state.game || !this.state.currentScoreEntries) {
       return null;
     }
     let game = this.state.game;
@@ -194,15 +214,20 @@ class GameController extends React.Component<
         </div>
       );
     }
-    console.log(game.scoreEntries)
     return (
       <div>
-        <GameMenu onArchiveGame={() => {this.finishGame()}} />
-        <h2>{game.field.name} - Hole Number {this.state.currentHole}</h2>
+        <GameMenu
+          onArchiveGame={() => {
+            this.finishGame();
+          }}
+        />
+        <h2>
+          {game.field.name} - Hole Number {this.state.currentHole}
+        </h2>
         <HoleView
           players={game.players}
           holeNumber={this.state.currentHole}
-          scoreEntries={game.scoreEntries.filter(scoreEntry => scoreEntry.hole === this.state.currentHole)}
+          scoreEntries={this.state.currentScoreEntries}
           updateScoreEntry={(playerId, newScore) =>
             this.updateScoreEntry(
               playerId,
@@ -256,11 +281,12 @@ class GameController extends React.Component<
           </Alert>
         </Snackbar>
         <Grid container direction="row" justify="center" alignItems="center">
-          <Pagination
-            page={this.state.currentHole}
+          <HoleNavigation
             onChange={(_, nextPage) => changePage(nextPage)}
+            disabled={this.isPaginationDisabled()}
             count={this.state.numberOfHoles ?? 1}
-            color="primary"
+            field={game.field}
+            currentHole={this.state.currentHole}
           />
         </Grid>
       </div>
