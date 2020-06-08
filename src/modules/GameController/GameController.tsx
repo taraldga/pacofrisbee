@@ -261,6 +261,9 @@ class GameController extends React.Component<
             onChange={(_, nextPage) => changePage(nextPage)}
             count={this.state.numberOfHoles ?? 1}
             color="primary"
+            variant="outlined" 
+            shape="rounded"
+            size="large"
           />
         </Grid>
       </div>
