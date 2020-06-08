@@ -23,11 +23,11 @@ const useStyles = makeStyles({
   },
   item: {
     borderRadius: "4px",
-    height: "40px",
+    height: "32px",
     padding: "0 10px",
     fontSize: "0.9375rem",
-    minWidth: "40px",
-    maxWidth: "40px",
+    minWidth: "32px",
+    maxWidth: "32px",
     border: "1px solid rgba(0, 0, 0, 0.23)",
     backgroundColor: "transparent",
     position: "relative",
@@ -62,9 +62,9 @@ const useStyles = makeStyles({
   ellipsis: {
     height: "auto",
     fontSize: "0.9375rem",
-    minWidth: "40px",
+    minWidth: "32px",
     borderRadius: "20px",
-    maxWidth: "40px",
+    maxWidth: "32px",
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
@@ -83,6 +83,7 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
     onChange,
     disabled,
     page: currentHole,
+    siblingCount:2
   });
   const classes = useStyles();
   return (
