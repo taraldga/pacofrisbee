@@ -127,7 +127,8 @@ export const updateGame = async (game: GameData) => {
 export const saveScore = async (game: GameData) => {
     const ref = db.collection('games').doc(game.id);
     const newGameData = await ref.update({
-        scoreEntries: game.scoreEntries
+        scoreEntries: game.scoreEntries,
+        field: game.field
     })
     return newGameData;
 }

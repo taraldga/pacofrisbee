@@ -71,11 +71,21 @@ const GameCreator : React.FC = () => {
         })
     }
 
+    const setupHoles = (field: Field) => {
+        field.holes.forEach(hole => {
+            hole.isPlayed = false
+        });
+        return field;
+    }
+
     const startGame = async () => {
         let error = verifyInput(game);
         if(Object.keys(error).length === 0 && error.constructor === Object) {
-            let dbGame = await createGame(game)
-            console.log(dbGame)
+            const gameToSave = {
+                ...game,
+                field: setupHoles(game.field)
+            }
+            let dbGame = await createGame(gameToSave)
             history.push(`/game/${dbGame.id}/${1}`)
         } else {
             setError(error)
