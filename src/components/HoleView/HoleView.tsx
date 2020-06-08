@@ -47,11 +47,10 @@ const HoleView: React.FC<HoleViewProps> = ({
           {
             players.map((player, idx) => {
               const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id) as ScoreEntry;
-              console.log(playerScoreEntry)
               if(playerScoreEntry) {
                 return (
                   <>
-                  <ListItem className="list-row">
+                  <ListItem className={`list-row ${!!isDirty(playerScoreEntry) && "is-dirty"}`}>
                     <ListItemText primary={player.name} />
                     <ListItemSecondaryAction>
                       <NumberInput isDirty={!!isDirty(playerScoreEntry)} value={playerScoreEntry.score} onChange={(newScore) => updateScoreEntry(player.id, newScore)}/>

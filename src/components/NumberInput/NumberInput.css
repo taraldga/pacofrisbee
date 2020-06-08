@@ -1,6 +1,7 @@
 .number-input {
   max-width: 50px;
   font-weight: bold;
+  background-color: white;
 }
 .number-input>div>input {
   height: 12px;
@@ -14,6 +15,7 @@
 }
 .dirty-score > div > input {
   color: green !important;
+  font-weight: bolder;
 }
 
 
