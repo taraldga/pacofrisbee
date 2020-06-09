@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
   item: {
     borderRadius: "4px",
-    margin: "0",
+    margin: "0 3px",
     height: buttonSize,
     fontSize: "0.9375rem",
     minWidth: buttonSize,
@@ -68,6 +68,7 @@ const useStyles = makeStyles({
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
+    margin: "0 3px"
   }
 });
 
@@ -83,7 +84,7 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
     onChange,
     disabled,
     page: currentHole,
-    siblingCount:1
+    siblingCount:1,
   });
   const classes = useStyles();
   return (
