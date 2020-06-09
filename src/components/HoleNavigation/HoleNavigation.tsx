@@ -12,7 +12,7 @@ export interface HoleNavigationProps {
   field: Field;
   onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
-
+const buttonSize = "36px"
 const useStyles = makeStyles({
   ul: {
     listStyle: "none",
@@ -23,11 +23,11 @@ const useStyles = makeStyles({
   },
   item: {
     borderRadius: "4px",
-    height: "32px",
+    height: buttonSize,
     padding: "0 10px",
     fontSize: "0.9375rem",
-    minWidth: "32px",
-    maxWidth: "32px",
+    minWidth: buttonSize,
+    maxWidth: buttonSize,
     border: "1px solid rgba(0, 0, 0, 0.23)",
     backgroundColor: "transparent",
     position: "relative",
@@ -62,7 +62,7 @@ const useStyles = makeStyles({
   ellipsis: {
     height: "auto",
     fontSize: "0.9375rem",
-    minWidth: "32px",
+    minWidth: buttonSize,
     borderRadius: "20px",
     maxWidth: "32px",
     display: "inline-flex",
@@ -83,7 +83,7 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
     onChange,
     disabled,
     page: currentHole,
-    siblingCount:2
+    siblingCount:1
   });
   const classes = useStyles();
   return (
