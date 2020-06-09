@@ -12,7 +12,7 @@ export interface HoleNavigationProps {
   field: Field;
   onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
-const buttonSize = "36px"
+const buttonSize = "36px";
 const useStyles = makeStyles({
   ul: {
     listStyle: "none",
@@ -23,6 +23,7 @@ const useStyles = makeStyles({
   },
   item: {
     borderRadius: "4px",
+    margin: "0",
     height: buttonSize,
     fontSize: "0.9375rem",
     minWidth: buttonSize,
@@ -89,7 +90,7 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
     <nav>
       <ul className={classes.ul}>
         {items.map(({ page, type, selected, ...item }, index) => {
-          let children = null;
+          let children;
           if (type === "start-ellipsis" || type === "end-ellipsis") {
             children = (
               <div className={`${classes.ellipsis}`}>
