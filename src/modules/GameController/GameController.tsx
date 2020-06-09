@@ -100,7 +100,7 @@ class GameController extends React.Component<
     this.setState({
       game: currentGame,
       numberOfHoles: currentGame.field.holes.length,
-      currentScoreEntries: currentScores
+      currentScoreEntries: currentScores,
     });
   }
 
@@ -128,22 +128,23 @@ class GameController extends React.Component<
   }
 
   private isDataDirty = () => {
-    if(this.state.currentScoreEntries) {
+    if (this.state.currentScoreEntries) {
       return this.state.currentScoreEntries
-      .filter((entry) => entry.hole === this.state.currentHole)
-      .some((scoreEntry) => scoreEntry.new || scoreEntry.updated);
+        .filter((entry) => entry.hole === this.state.currentHole)
+        .some((scoreEntry) => scoreEntry.new || scoreEntry.updated);
     }
     return false;
   };
 
   private isPaginationDisabled = () => {
-    if(this.state.currentScoreEntries) {
+    if (this.state.isSaving) return true;
+    if (this.state.currentScoreEntries) {
       return this.state.currentScoreEntries
-      .filter((entry) => entry.hole === this.state.currentHole)
-      .some((scoreEntry) => scoreEntry.updated);
+        .filter((entry) => entry.hole === this.state.currentHole)
+        .some((scoreEntry) => scoreEntry.updated);
     }
     return false;
-  }
+  };
 
   private toggleShowStandings() {
     this.setState({
@@ -153,11 +154,11 @@ class GameController extends React.Component<
 
   private markHoleAsSaved(field: Field, holeNumber: number) {
     const updatedHoles = [...field.holes];
-    updatedHoles[holeNumber-1].isPlayed = true
+    updatedHoles[holeNumber - 1].isPlayed = true;
     return {
       ...field,
-      holes: updatedHoles
-    }
+      holes: updatedHoles,
+    };
   }
 
   private async onSave() {
@@ -165,18 +166,27 @@ class GameController extends React.Component<
       this.setState({
         isSaving: true,
       });
-      let newScores = [...this.state.game.scoreEntries, ...this.state.currentScoreEntries];
+      const oldScoresToSave = this.state.game.scoreEntries.filter(
+        (scoreEntry) => scoreEntry.hole !== this.state.currentHole
+      );
+      let newScores = [
+        ...oldScoresToSave,
+        ...this.state.currentScoreEntries,
+      ];
       newScores.forEach((scoreEntry) => {
         if (scoreEntry.hole === this.state.currentHole) {
           scoreEntry.updated = false;
           scoreEntry.new = false;
         }
       });
-      const updatedField = this.markHoleAsSaved(this.state.game.field, this.state.currentHole);
+      const updatedField = this.markHoleAsSaved(
+        this.state.game.field,
+        this.state.currentHole
+      );
       const newGame: GameData = {
         ...this.state.game,
         scoreEntries: newScores,
-        field: updatedField
+        field: updatedField,
       };
       await saveScore(newGame);
       this.setState({
