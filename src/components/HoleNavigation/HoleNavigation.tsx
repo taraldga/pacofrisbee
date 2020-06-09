@@ -24,7 +24,6 @@ const useStyles = makeStyles({
   item: {
     borderRadius: "4px",
     height: buttonSize,
-    padding: "0 10px",
     fontSize: "0.9375rem",
     minWidth: buttonSize,
     maxWidth: buttonSize,
