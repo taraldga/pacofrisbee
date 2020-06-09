@@ -96,10 +96,6 @@ class GameController extends React.Component<
         currentGame.players,
         gameId
       );
-    } else {
-      currentGame.scoreEntries = currentGame.scoreEntries.filter(
-        (scoreEntry) => scoreEntry.hole !== currentHole
-      );
     }
     this.setState({
       game: currentGame,
@@ -170,8 +166,11 @@ class GameController extends React.Component<
       this.setState({
         isSaving: true,
       });
+      const oldScoresToSave = this.state.game.scoreEntries.filter(
+        (scoreEntry) => scoreEntry.hole !== this.state.currentHole
+      );
       let newScores = [
-        ...this.state.game.scoreEntries,
+        ...oldScoresToSave,
         ...this.state.currentScoreEntries,
       ];
       newScores.forEach((scoreEntry) => {
