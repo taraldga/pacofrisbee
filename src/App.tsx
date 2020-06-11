@@ -1,16 +1,16 @@
 import "./App.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import { auth } from "firebase/app";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
 import GameController from "./modules/GameController/GameController";
 import GameCreator from "./modules/GameCreator/GameCreator";
-import HomeScreen from "modules/HomeScreen";
-import TopBar from "components/TopBar/TopBar";
-import React from "react";
 import GameOverview from "modules/GameOverview/GameOverview";
+import HomeScreen from "modules/HomeScreen";
+import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import TopBar from "components/TopBar/TopBar";
+import { auth } from "firebase/app";
 
 export enum SignInState {
   waiting,
@@ -50,7 +50,6 @@ function App() {
   return (
     <>
       <Router>
-        <TopBar />
         {user !== SignInState.waiting && user !== SignInState.notSignedIn ? (
           <div className="App">
             <Switch>
