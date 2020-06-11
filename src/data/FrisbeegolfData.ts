@@ -133,3 +133,9 @@ export const saveScore = async (game: GameData) => {
     })
     return newGameData;
 }
+
+export const deleteGame = async (game: GameData) => {
+    const ref = db.collection('games').doc(game.id);
+    const ok = await ref.delete();
+    return ok
+}

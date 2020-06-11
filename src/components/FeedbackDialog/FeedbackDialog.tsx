@@ -1,10 +1,10 @@
-import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import React from 'react';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
 
@@ -32,6 +32,7 @@ export  const  FeedbackDialog : React.FC<DialogProps> = ({
   onAgree,
   onClose
 })  => {
+  const okButtonColor = dangerous ? "secondary" : "primary";
   return (
     <Dialog
       open={open}
@@ -51,7 +52,7 @@ export  const  FeedbackDialog : React.FC<DialogProps> = ({
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={onAgree} color="primary">
+        <Button onClick={onAgree} variant="contained" color={okButtonColor} >
           Ok
         </Button>
       </DialogActions>

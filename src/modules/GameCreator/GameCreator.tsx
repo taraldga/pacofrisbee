@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { getFields, getPlayers, createGame, savePlayer} from 'data/FrisbeegolfData';
-import { useHistory } from "react-router-dom";
+import "./GameCreator.css"
+
+import { Checkbox, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { createGame, getFields, getPlayers, savePlayer } from 'data/FrisbeegolfData';
 
 import Button from '@material-ui/core/Button';
+import Field from 'types/Field';
 import FormControl from '@material-ui/core/FormControl';
 import { GameData } from 'types/Game';
 import InputLabel from '@material-ui/core/InputLabel';
-import { MenuItem, TableContainer, Table, TableBody, TableRow, TableCell, Checkbox, TableHead } from '@material-ui/core';
-import Select from '@material-ui/core/Select';
-import uniqid from 'uniqid'
-import "./GameCreator.css"
 import Player from 'types/Player';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import Field from 'types/Field';
+import uniqid from 'uniqid'
+import { useHistory } from "react-router-dom";
 
 const GameCreator : React.FC = () => {
     let history = useHistory();
@@ -71,21 +72,11 @@ const GameCreator : React.FC = () => {
         })
     }
 
-    const setupHoles = (field: Field) => {
-        field.holes.forEach(hole => {
-            hole.isPlayed = false
-        });
-        return field;
-    }
-
     const startGame = async () => {
         let error = verifyInput(game);
         if(Object.keys(error).length === 0 && error.constructor === Object) {
-            const gameToSave = {
-                ...game,
-                field: setupHoles(game.field)
-            }
-            let dbGame = await createGame(gameToSave)
+            game.playerList = game.players.map(player => player.name);
+            let dbGame = await createGame(game)
             history.push(`/game/${dbGame.id}/${1}`)
         } else {
             setError(error)
