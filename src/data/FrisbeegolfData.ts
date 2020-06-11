@@ -1,7 +1,8 @@
+import { firestore, initializeApp } from "firebase";
+
 import Field from "types/Field"
 import { GameData } from "types/Game";
 import Player from "types/Player";
-import { initializeApp, firestore } from "firebase";
 
 // Initialize firebase
 const firebaseConfig = {
@@ -72,7 +73,7 @@ export const getPlayers = async () => {
  * Gets all games currently stored on the server
  */
 export const getGames = async ()  =>  {
-    const firebaseObject = await db.collection('games').get()
+    const firebaseObject = await db.collection('games').where('playerList', 'array-contains','Tarald Gåsbakk').get()
     const games: GameData[] = [];
     firebaseObject.forEach(gameObject => {
         const newObject = {
