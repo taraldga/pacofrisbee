@@ -9,7 +9,6 @@ import GameOverview from "modules/GameOverview/GameOverview";
 import HomeScreen from "modules/HomeScreen";
 import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import TopBar from "components/TopBar/TopBar";
 import { auth } from "firebase/app";
 
 export enum SignInState {

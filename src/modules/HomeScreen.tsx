@@ -5,7 +5,6 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
 import SendIcon from '@material-ui/icons/Send';
-import { findByLabelText } from '@testing-library/react';
 
 const useStyles = makeStyles(() =>
   createStyles({
