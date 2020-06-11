@@ -3,6 +3,7 @@ import * as React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
+import Image from '../images/DiscGolfSmall.jpg';
 import { Link } from 'react-router-dom'
 import SendIcon from '@material-ui/icons/Send';
 
@@ -13,7 +14,11 @@ const useStyles = makeStyles(() =>
       flexDirection: "column",
       textAlign: "center",
       height: "100%",
-      justifyContent: "space-around"
+      justifyContent: "space-around",
+      backgroundImage: `url(${Image})`,
+      backgroundSize: "170%",
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "50% 103%",
     },
     buttonRow: {
       display: "block",
