@@ -1,26 +1,26 @@
-import * as React from "react";
-
 import "./GameController.css";
 
-import { RouteComponentProps } from "react-router-dom";
-import { withRouter } from "react-router-dom";
+import * as React from "react";
 
-import HoleView from "components/HoleView/HoleView";
-import { fetchGame, saveScore, updateGame } from "data/FrisbeegolfData";
-import { GameData } from "types/Game";
-import Button from "@material-ui/core/Button";
-import ScoreDialog from "components/ScoreDialog/ScoreDialog";
-import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
-import Grid from "@material-ui/core/Grid";
-import Save from "@material-ui/icons/Save";
-import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
-import ScoreTable from "modules/ScoreTable/ScoreTable";
-import { GameMenu } from "./GameMenu/GameMenu";
-import { createInitialScoreEntries } from "util/createInitialScoreEntries";
-import HoleNavigation from "components/HoleNavigation/HoleNavigation";
-import { ScoreEntry } from "types/ScoreEntry";
+import { deleteGame, fetchGame, saveScore, updateGame } from "data/FrisbeegolfData";
+
+import Button from "@material-ui/core/Button";
+import EmojiEventsIcon from "@material-ui/icons/EmojiEvents";
 import Field from "types/Field";
+import { GameData } from "types/Game";
+import { GameMenu } from "./GameMenu/GameMenu";
+import Grid from "@material-ui/core/Grid";
+import HoleNavigation from "components/HoleNavigation/HoleNavigation";
+import HoleView from "components/HoleView/HoleView";
+import { RouteComponentProps } from "react-router-dom";
+import Save from "@material-ui/icons/Save";
+import ScoreDialog from "components/ScoreDialog/ScoreDialog";
+import { ScoreEntry } from "types/ScoreEntry";
+import ScoreTable from "modules/ScoreTable/ScoreTable";
+import Snackbar from "@material-ui/core/Snackbar";
+import { createInitialScoreEntries } from "util/createInitialScoreEntries";
+import { withRouter } from "react-router-dom";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -206,6 +206,13 @@ class GameController extends React.Component<
     }
   }
 
+  private deleteGame() {
+    if (this.state.game) {
+      deleteGame(this.state.game)
+      this.props.history.push(`/`);
+    }
+  }
+
   public render() {
     const changePage = async (nextPage: number) => {
       this.props.history.push(`/game/${this.state.gameId}/${nextPage}`);
@@ -225,14 +232,18 @@ class GameController extends React.Component<
       );
     }
     return (
-      <div>
+      <div className="game-controller">
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();
           }}
+          onDeleteGame={() => {
+            this.deleteGame();
+          }
+          }
         />
-        <h2>
-          {game.field.name} - Hole Number {this.state.currentHole}
+        <h2 className="mega-number">
+          {this.state.currentHole}
         </h2>
         <HoleView
           players={game.players}
@@ -266,7 +277,7 @@ class GameController extends React.Component<
           size="large"
           onClick={() => this.toggleShowStandings()}
         >
-          View Standings
+          Leaderboard
         </Button>
         <ScoreDialog
           isOpen={!!this.state.showStandings}

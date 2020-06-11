@@ -9,4 +9,5 @@ export interface GameData {
     players: Player[]
     scoreEntries: ScoreEntry[]
     isFinished?: boolean;
+    playerList?: string[];
 }
