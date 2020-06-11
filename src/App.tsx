@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import GameController from "./modules/GameController/GameController";
@@ -16,10 +17,19 @@ export enum SignInState {
   notSignedIn,
 }
 
+
+
 function App() {
   const [user, setUser] = React.useState<firebase.User | SignInState>(
     SignInState.waiting
   );
+  const theme = createMuiTheme({
+    palette: {
+      primary: {
+        main: "#255C88"
+      }
+    }
+  });
   // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
@@ -48,6 +58,7 @@ function App() {
 
   return (
     <>
+    <ThemeProvider theme={theme}>
       <Router>
         {user !== SignInState.waiting && user !== SignInState.notSignedIn ? (
           <div className="App">
@@ -72,6 +83,7 @@ function App() {
           loginScreenJsx
         )}
       </Router>
+      </ThemeProvider>
     </>
   );
 }
