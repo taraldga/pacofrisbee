@@ -16,9 +16,8 @@ const useStyles = makeStyles(() =>
       height: "100%",
       justifyContent: "space-around",
       backgroundImage: `url(${Image})`,
-      backgroundSize: "170%",
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "50% 103%",
+      backgroundSize: "cover",
+      backgroundPosition: "50% 50%",
     },
     buttonRow: {
       display: "block",
