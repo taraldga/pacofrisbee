@@ -13,7 +13,6 @@ import { GameMenu } from "./GameMenu/GameMenu";
 import Grid from "@material-ui/core/Grid";
 import HoleNavigation from "components/HoleNavigation/HoleNavigation";
 import HoleView from "components/HoleView/HoleView";
-import Loader from "components/Loader/Loader";
 import { RouteComponentProps } from "react-router-dom";
 import Save from "@material-ui/icons/Save";
 import ScoreDialog from "components/ScoreDialog/ScoreDialog";
@@ -234,7 +233,6 @@ class GameController extends React.Component<
     }
     return (
       <div className="game-controller">
-        {/* <Loader isOpen={!!this.state.isSaving} text={"Saving ..."}/> */}
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();

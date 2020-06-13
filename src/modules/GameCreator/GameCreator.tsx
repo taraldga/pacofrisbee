@@ -14,7 +14,6 @@ import Field from "types/Field";
 import FormControl from "@material-ui/core/FormControl";
 import { GameData } from "types/Game";
 import InputLabel from "@material-ui/core/InputLabel";
-import Loader from "components/Loader/Loader";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Paper from "@material-ui/core/Paper/Paper";
 import Player from "types/Player";
@@ -93,7 +92,7 @@ const GameCreator: React.FC = () => {
   const [error, setError] = useState<{ [key: string]: string }>({});
   const [players, setPlayers] = useState<Player[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  console.log(isLoading)
   const classes = useStyles();
 
   useEffect(() => {
@@ -174,7 +173,6 @@ const GameCreator: React.FC = () => {
 
   return (
     <div className={classes.inputGroup}>
-      {/* <Loader isOpen={isLoading} text="Loading..." wait={700} /> */}
       <Paper className={classes.inputGroup}>
         <h2>Select field</h2>
         <FormControl
