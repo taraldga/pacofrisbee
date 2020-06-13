@@ -174,7 +174,7 @@ const GameCreator: React.FC = () => {
 
   return (
     <div className={classes.inputGroup}>
-      <Loader isOpen={isLoading} text="Loading..." wait={700} />
+      {/* <Loader isOpen={isLoading} text="Loading..." wait={700} /> */}
       <Paper className={classes.inputGroup}>
         <h2>Select field</h2>
         <FormControl

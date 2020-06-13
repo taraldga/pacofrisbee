@@ -234,7 +234,7 @@ class GameController extends React.Component<
     }
     return (
       <div className="game-controller">
-        <Loader isOpen={!!this.state.isSaving} text={"Saving ..."}/>
+        {/* <Loader isOpen={!!this.state.isSaving} text={"Saving ..."}/> */}
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();
