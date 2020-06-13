@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "flex",
         flexDirection: "column",
         alignContent: "center",
-        "& h3": {
+        "& h2": {
             backgroundColor: theme.palette.primary.main,
             margin: "0",
             padding: "10px 0",
@@ -176,7 +176,7 @@ const GameCreator: React.FC = () => {
     <div className={classes.inputGroup}>
       <Loader isOpen={isLoading} text="Loading..." wait={700} />
       <Paper className={classes.inputGroup}>
-        <h3>Select field</h3>
+        <h2>Select field</h2>
         <FormControl
           error={error["field"] !== undefined}
           className={classes.inputDropDown}
@@ -196,7 +196,7 @@ const GameCreator: React.FC = () => {
         </FormControl>
       </Paper>
       <Paper className={classes.inputGroup}>
-        <h3>Select players</h3>
+        <h2>Select players</h2>
         <TableContainer className={classes.inputTable}>
           <Table>
             <TableHead>
