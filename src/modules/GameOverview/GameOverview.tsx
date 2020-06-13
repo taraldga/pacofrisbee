@@ -1,17 +1,19 @@
 import * as React from 'react'
-import { getGames } from 'data/FrisbeegolfData';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+
+import Divider from '@material-ui/core/Divider';
+import { GameData } from 'types/Game';
+import IconButton from '@material-ui/core/IconButton';
+import { Link } from 'react-router-dom';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
+import ListItemText from '@material-ui/core/ListItemText';
+import Player from 'types/Player';
 import SendIcon from '@material-ui/icons/Send';
 import format from 'date-fns/format';
-import Divider from '@material-ui/core/Divider';
-import { Link } from 'react-router-dom';
-import { GameData } from 'types/Game';
-import Player from 'types/Player';
+import { getGames } from 'data/FrisbeegolfData';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,7 +49,7 @@ const GameOverview = () => {
         {
           games?.sort((a,b) => b.date.getTime() - a.date.getTime()).map((game: GameData, idx: number) => {
             return (
-              <>
+              <div key={`game-${idx}`}>
                 <Link to={`/game/${game.id}/1`}>
                 <ListItem>
                   <ListItemText primary={game.field.name} secondary={`${format(game.date, "dd.MM.yyyy")}  -    ${listplayers(game.players)}` } />
@@ -59,7 +61,7 @@ const GameOverview = () => {
                 </ListItem>
                 </Link>
                 {idx < games.length-1 && <Divider />}
-              </>
+              </div>
         )})}
       </List>
     </div>

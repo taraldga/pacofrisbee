@@ -184,7 +184,7 @@ const GameCreator: React.FC = () => {
           <InputLabel>Select Field</InputLabel>
           <Select
             placeholder="Select field"
-            value={game?.field.id}
+            value={game?.field.id ?? ''}
             onChange={updateField}
           >
             {fields.map((field) => (
