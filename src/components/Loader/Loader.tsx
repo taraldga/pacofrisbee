@@ -1,10 +1,10 @@
 import * as React from 'react';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Theme } from '@material-ui/core/styles/createMuiTheme';
-import createStyles from '@material-ui/core/styles/createStyles';
+
 import Backdrop from '@material-ui/core/Backdrop/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
-
+import { Theme } from '@material-ui/core/styles/createMuiTheme';
+import createStyles from '@material-ui/core/styles/createStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 
 interface LoaderProps {
   isOpen: boolean;
@@ -30,21 +30,19 @@ const Loader: React.FC<LoaderProps> = ({
   wait
 }) => {
   const [render, setRender] = React.useState(isOpen);
-  const [timer, setTimer] = React.useState<NodeJS.Timer | undefined>(undefined);
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(wait && wait > 0 && isOpen === true && !timer) {
+    if(wait && wait > 0 && isOpen === true) {
       const newTimer = setTimeout(() => setRender(true), wait)
-      setTimer(newTimer);
+      console.log("Is reseting timer")
+      return () => clearTimeout(newTimer);
     } else {
       setRender(false);
-      if(timer) {
-        clearTimeout(timer)
-        setTimer(undefined);
-      }
     }
-  }, [isOpen, timer, wait])
+  }, [isOpen, wait])
+
+
 
   return (
     <Backdrop className={classes.backdrop} open={render}>

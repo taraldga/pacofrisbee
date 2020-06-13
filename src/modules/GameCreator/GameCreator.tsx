@@ -9,29 +9,28 @@ import {
 } from "data/FrisbeegolfData";
 
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Field from "types/Field";
 import FormControl from "@material-ui/core/FormControl";
 import { GameData } from "types/Game";
 import InputLabel from "@material-ui/core/InputLabel";
+import Loader from "components/Loader/Loader";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import Paper from "@material-ui/core/Paper/Paper";
 import Player from "types/Player";
 import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import uniqid from "uniqid";
-import { useHistory } from "react-router-dom";
-import Loader from "components/Loader/Loader";
-import Paper from "@material-ui/core/Paper/Paper";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import TableContainer from "@material-ui/core/TableContainer/TableContainer";
 import Table from "@material-ui/core/Table/Table";
+import TableBody from "@material-ui/core/TableBody/TableBody";
+import TableCell from "@material-ui/core/TableCell/TableCell";
+import TableContainer from "@material-ui/core/TableContainer/TableContainer";
 import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
-import TableCell from "@material-ui/core/TableCell/TableCell";
-import TableBody from "@material-ui/core/TableBody/TableBody";
-import Checkbox from "@material-ui/core/Checkbox/Checkbox";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import TextField from "@material-ui/core/TextField";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
-
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import uniqid from "uniqid";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -136,9 +135,9 @@ const GameCreator: React.FC = () => {
   };
 
   const startGame = async () => {
-    setIsLoading(true);
     let error = verifyInput(game);
     if (Object.keys(error).length === 0 && error.constructor === Object) {
+      setIsLoading(true);
       game.playerList = game.players.map((player) => player.name);
       let dbGame = await createGame(game);
       history.push(`/game/${dbGame.id}/${1}`);

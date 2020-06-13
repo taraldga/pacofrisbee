@@ -13,6 +13,7 @@ import { GameMenu } from "./GameMenu/GameMenu";
 import Grid from "@material-ui/core/Grid";
 import HoleNavigation from "components/HoleNavigation/HoleNavigation";
 import HoleView from "components/HoleView/HoleView";
+import Loader from "components/Loader/Loader";
 import { RouteComponentProps } from "react-router-dom";
 import Save from "@material-ui/icons/Save";
 import ScoreDialog from "components/ScoreDialog/ScoreDialog";
@@ -21,7 +22,6 @@ import ScoreTable from "modules/ScoreTable/ScoreTable";
 import Snackbar from "@material-ui/core/Snackbar";
 import { createInitialScoreEntries } from "util/createInitialScoreEntries";
 import { withRouter } from "react-router-dom";
-import Loader from "components/Loader/Loader";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -234,7 +234,7 @@ class GameController extends React.Component<
     }
     return (
       <div className="game-controller">
-        <Loader isOpen={!!this.state.isSaving} text={"Saving ..."} wait={700}/>
+        <Loader isOpen={!!this.state.isSaving} text={"Saving ..."}/>
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();
