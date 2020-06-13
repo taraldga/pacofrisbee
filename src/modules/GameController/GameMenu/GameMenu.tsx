@@ -69,7 +69,7 @@ export const GameMenu: React.FC<{onArchiveGame: () => void, onDeleteGame: () => 
           <Archive />
           Finish game
         </MenuItem>
-        <MenuItem key={"archive"} onClick={openDeletePopup} style={{color: "red"}}>
+        <MenuItem key={"delete"} onClick={openDeletePopup} style={{color: "red"}}>
           <Delete />
           Delete game
         </MenuItem>
