@@ -38,7 +38,7 @@ const Loader: React.FC<LoaderProps> = ({
       console.log("Is reseting timer")
       return () => clearTimeout(newTimer);
     } else {
-      setRender(false);
+      setRender(isOpen);
     }
   }, [isOpen, wait])
 
