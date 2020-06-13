@@ -34,16 +34,17 @@ const Loader: React.FC<LoaderProps> = ({
   const classes = useStyles();
 
   React.useEffect(() => {
-    if(wait && wait > 0 && isOpen === true) {
+    if(wait && wait > 0 && isOpen === true && !timer) {
       const newTimer = setTimeout(() => setRender(true), wait)
       setTimer(newTimer);
     } else {
       setRender(false);
       if(timer) {
         clearTimeout(timer)
+        setTimer(undefined);
       }
     }
-  }, [isOpen])
+  }, [isOpen, timer, wait])
 
   return (
     <Backdrop className={classes.backdrop} open={render}>
