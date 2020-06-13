@@ -1,18 +1,18 @@
+import './HoleView.css'
+
 import * as React from 'react'
 
-import './HoleView.css'
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { ScoreEntry } from 'types/ScoreEntry'
-import Player from 'types/Player'
-import TableContainer from '@material-ui/core/TableContainer'
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
+
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import NumberInput from 'components/NumberInput/NumberInput';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Divider from '@material-ui/core/Divider';
-
-
+import Player from 'types/Player'
+import { ScoreEntry } from 'types/ScoreEntry'
+import TableContainer from '@material-ui/core/TableContainer'
 
 export interface HoleViewProps {
   players: Player[];
@@ -49,7 +49,7 @@ const HoleView: React.FC<HoleViewProps> = ({
               const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id) as ScoreEntry;
               if(playerScoreEntry) {
                 return (
-                  <>
+                  <div key={`score-${idx}`}>
                   <ListItem className={`list-row ${!!isDirty(playerScoreEntry) && "is-dirty"}`}>
                     <ListItemText primary={player.name} />
                     <ListItemSecondaryAction>
@@ -57,7 +57,7 @@ const HoleView: React.FC<HoleViewProps> = ({
                     </ListItemSecondaryAction>
                  </ListItem>
                  {idx < players.length-1 && <Divider />}
-                 </>
+                 </div>
                )
               } else {
                 return null
