@@ -1,8 +1,9 @@
-import { firestore, initializeApp } from "firebase";
+import "firebase/firestore"
 
 import Field from "types/Field"
 import { GameData } from "types/Game";
 import Player from "types/Player";
+import firebase from "firebase/app";
 
 // Initialize firebase
 const firebaseConfig = {
@@ -15,8 +16,8 @@ const firebaseConfig = {
     appId: "1:164274232100:web:8f42eb0afee2a473b9f1b1",
     measurementId: "G-KQKTCY6Y4V"
 };
-initializeApp(firebaseConfig);
-const db = firestore();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 
 export const getFields = async () => {

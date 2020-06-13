@@ -1,4 +1,7 @@
 import "./App.css";
+import 'firebase/auth';
+
+import * as firebase from 'firebase/app';
 
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -10,7 +13,6 @@ import GameOverview from "modules/GameOverview/GameOverview";
 import HomeScreen from "modules/HomeScreen";
 import React from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { auth } from "firebase/app";
 
 export enum SignInState {
   waiting,
@@ -37,9 +39,9 @@ function App() {
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: "/",
     // We will display Google and Facebook as auth providers.
-    signInOptions: [auth.GoogleAuthProvider.PROVIDER_ID],
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
   };
-  auth().onAuthStateChanged(function (user) {
+  firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       setUser(user);
     } else {
@@ -50,7 +52,7 @@ function App() {
   let loginScreenJsx;
   if (user === SignInState.notSignedIn) {
     loginScreenJsx = (
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth()} />
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     );
   } else if (user === SignInState.waiting) {
     loginScreenJsx = <CircularProgress />;
