@@ -14,6 +14,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import uniqid from 'uniqid'
 import { useHistory } from "react-router-dom";
+import Loader from "components/Loader/Loader";
 
 const GameCreator : React.FC = () => {
     let history = useHistory();
@@ -30,19 +31,15 @@ const GameCreator : React.FC = () => {
     const [newPlayerName, setNewPlayerName] = useState("")
     const [error, setError] = useState<{[key: string]: string}>({})
     const [players, setPlayers] = useState<Player[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     
     useEffect(() => {
         const fetchData = async () => {
           let fields = await getFields()
           setFields(fields)
-        }
-        fetchData()
-      }, [])
-
-      useEffect(() => {
-        const fetchData = async () => {
           let players = await getPlayers()
-          setPlayers(players)
+          setPlayers(players);
+          setIsLoading(false);
         }
         fetchData()
       }, [])
@@ -73,6 +70,7 @@ const GameCreator : React.FC = () => {
     }
 
     const startGame = async () => {
+        setIsLoading(true);
         let error = verifyInput(game);
         if(Object.keys(error).length === 0 && error.constructor === Object) {
             game.playerList = game.players.map(player => player.name);
@@ -110,6 +108,7 @@ const GameCreator : React.FC = () => {
     
     return (
         <div className="game-creator-view">
+        <Loader isOpen={isLoading} text="Loading..." wait={700} />
         <h3>Select field</h3>
         <div className="input-group">
             <FormControl className="gamecreator-select" error={ error["field"]!== undefined}>

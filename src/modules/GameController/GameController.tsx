@@ -21,6 +21,7 @@ import ScoreTable from "modules/ScoreTable/ScoreTable";
 import Snackbar from "@material-ui/core/Snackbar";
 import { createInitialScoreEntries } from "util/createInitialScoreEntries";
 import { withRouter } from "react-router-dom";
+import Loader from "components/Loader/Loader";
 
 function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -233,6 +234,7 @@ class GameController extends React.Component<
     }
     return (
       <div className="game-controller">
+        <Loader isOpen={!!this.state.isSaving} text={"Saving ..."} wait={700}/>
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();
