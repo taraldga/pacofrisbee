@@ -6,6 +6,7 @@
 .number-input>div>input {
   height: 12px;
   border: none;
+  color: black;
 }
 .button-group>button {
   border: none !important;
@@ -18,7 +19,11 @@
   font-weight: bolder;
 }
 
-
 .button-group {
-  width: 150px
+  display: inline-flex;
+  border-radius: 4px;
+  width: 150px;
+}
+.button-group > button {
+  min-width: 40px;
 }

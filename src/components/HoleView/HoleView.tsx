@@ -49,15 +49,15 @@ const HoleView: React.FC<HoleViewProps> = ({
               const playerScoreEntry = scoreEntries.find(entry => entry.playerId === player.id) as ScoreEntry;
               if(playerScoreEntry) {
                 return (
-                  <div key={`score-${idx}`}>
-                  <ListItem className={`list-row ${!!isDirty(playerScoreEntry) && "is-dirty"}`}>
+                  <>
+                  <ListItem key={`score-${idx}`} className={`list-row ${!!isDirty(playerScoreEntry) && "is-dirty"}`}>
                     <ListItemText primary={player.name} />
                     <ListItemSecondaryAction>
                       <NumberInput isDirty={!!isDirty(playerScoreEntry)} value={playerScoreEntry.score} onChange={(newScore) => updateScoreEntry(player.id, newScore)}/>
                     </ListItemSecondaryAction>
                  </ListItem>
-                 {idx < players.length-1 && <Divider />}
-                 </div>
+                 {idx < players.length-1 && <Divider key={`divider-${idx}`} />}
+                 </>
                )
               } else {
                 return null
