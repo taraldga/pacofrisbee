@@ -1,9 +1,10 @@
 import * as React from "react";
-import ChevronRight from "@material-ui/icons/ChevronRight";
+
 import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import usePagination from "@material-ui/lab/Pagination/usePagination";
+import ChevronRight from "@material-ui/icons/ChevronRight";
 import Field from "types/Field";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import usePagination from "@material-ui/lab/Pagination/usePagination";
 
 export interface HoleNavigationProps {
   currentHole: number;
@@ -12,7 +13,7 @@ export interface HoleNavigationProps {
   field: Field;
   onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
-const buttonSize = "36px";
+const buttonSize = "38px";
 const useStyles = makeStyles({
   ul: {
     listStyle: "none",
@@ -84,7 +85,7 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
     onChange,
     disabled,
     page: currentHole,
-    siblingCount:1,
+    siblingCount:0,
   });
   const classes = useStyles();
   return (
