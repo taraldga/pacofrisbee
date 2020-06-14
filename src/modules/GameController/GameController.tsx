@@ -232,7 +232,7 @@ class GameController extends React.Component<
       );
     }
     return (
-      <div className="game-controller">
+      <>
         <GameMenu
           onArchiveGame={() => {
             this.finishGame();
@@ -242,9 +242,11 @@ class GameController extends React.Component<
           }
           }
         />
+      <div className="game-controller">
         <h2 className="mega-number">
           {this.state.currentHole}
         </h2>
+        <div>
         <HoleView
           players={game.players}
           holeNumber={this.state.currentHole}
@@ -257,28 +259,29 @@ class GameController extends React.Component<
             )
           }
         />
-        <Button
-          disabled={!this.isDataDirty() || this.state.isSaving}
-          type="submit"
-          startIcon={<Save />}
-          className="standings-button"
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => this.onSave()}
-        >
-          Save scores
-        </Button>
-        <Button
-          startIcon={<EmojiEventsIcon />}
-          className="standings-button"
-          variant="contained"
-          color="primary"
-          size="large"
-          onClick={() => this.toggleShowStandings()}
-        >
-          Leaderboard
-        </Button>
+          <Button
+            disabled={!this.isDataDirty() || this.state.isSaving}
+            type="submit"
+            startIcon={<Save />}
+            className="standings-button"
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => this.onSave()}
+            >
+            Save scores
+          </Button>
+          <Button
+            startIcon={<EmojiEventsIcon />}
+            className="standings-button"
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={() => this.toggleShowStandings()}
+            >
+            Leaderboard
+          </Button>
+        </div>
         <ScoreDialog
           isOpen={!!this.state.showStandings}
           handleClose={() => this.toggleShowStandings()}
@@ -311,6 +314,7 @@ class GameController extends React.Component<
           />
         </Grid>
       </div>
+      </>
     );
   }
 }

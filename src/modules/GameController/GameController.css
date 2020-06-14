@@ -1,12 +1,16 @@
 .standings-button {
   width: 100%;
-  margin: 20px 0 !important;
+  margin: 10px 0 5px 0 !important;
 }
 
 .mega-number {
   font-size: 5em;
+  margin-top: 33px;
 }
 
 .game-controller {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
