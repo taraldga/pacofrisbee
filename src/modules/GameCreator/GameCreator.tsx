@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
         width: "200px"
     },
     inputGroup: {
-        margin: "20px 10px",
+        margin: "10px 10px",
         display: "flex",
         flexDirection: "column",
         alignContent: "center",
@@ -67,11 +67,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inputDropDown: {
         width: "98%",
-        margin: "10px auto"
+        margin: "10px auto",
+        minHeight: "40px"
     },
-    ".Mui-selected": {
-        backgroundColor: theme.palette.primary.main,
-        
+    startButton: {
+      minHeight: "42px"
     }
   })
 );
@@ -91,8 +91,7 @@ const GameCreator: React.FC = () => {
   const [newPlayerName, setNewPlayerName] = useState("");
   const [error, setError] = useState<{ [key: string]: string }>({});
   const [players, setPlayers] = useState<Player[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  console.log(isLoading)
+
   const classes = useStyles();
 
   useEffect(() => {
@@ -101,7 +100,6 @@ const GameCreator: React.FC = () => {
       setFields(fields);
       let players = await getPlayers();
       setPlayers(players);
-      setIsLoading(false);
     };
     fetchData();
   }, []);
@@ -136,7 +134,6 @@ const GameCreator: React.FC = () => {
   const startGame = async () => {
     let error = verifyInput(game);
     if (Object.keys(error).length === 0 && error.constructor === Object) {
-      setIsLoading(true);
       game.playerList = game.players.map((player) => player.name);
       let dbGame = await createGame(game);
       history.push(`/game/${dbGame.id}/${1}`);
@@ -197,12 +194,6 @@ const GameCreator: React.FC = () => {
         <h2>Select players</h2>
         <TableContainer className={classes.inputTable}>
           <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Checked</TableCell>
-              </TableRow>
-            </TableHead>
             <TableBody>
               {players.map((player, index) => {
                 const isItemSelected = isSelected(player.id);
