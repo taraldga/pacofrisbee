@@ -62,8 +62,8 @@ function App() {
     <>
     <ThemeProvider theme={theme}>
       <Router>
+        <div className="App">
         {user !== SignInState.waiting && user !== SignInState.notSignedIn ? (
-          <div className="App">
             <Switch>
               <Route exact path="/">
                 <HomeScreen />
@@ -78,12 +78,12 @@ function App() {
               />
               <Route exact path="/gameoverview">
                 <GameOverview />
-              </Route>
+            </Route>
             </Switch>
-          </div>
         ) : (
           loginScreenJsx
-        )}
+          )}
+        </div>
       </Router>
       </ThemeProvider>
     </>
