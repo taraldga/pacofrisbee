@@ -29,13 +29,15 @@ const useStyles = makeStyles(() =>
       display: "block",
     },
     startButton: {
-      backgroundColor: "rgba(37, 92, 136 , 0.5)",
+      backgroundColor: "rgba(37, 92, 136, 0.5)",
       border: "white 1px solid",
       height: "65px",
       color: "white",
       width: "80%",
-      margin: "10px 0"
-      
+      margin: "10px 0",
+      "&:hover": {
+        backgroundColor: "rgba(37, 92, 136, 0.3)"
+      }
     }
   }),
 );
