@@ -13,19 +13,22 @@ import HomeScreen from "modules/HomeScreen";
 import React, { useEffect } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { CenteredLoader } from "components/CenteredLoader/CenteredLoader";
+import UserContext, { PlayerPlaceHolder } from "util/UserContext";
+import Player from "types/Player";
 
 
 export enum SignInState {
   waiting,
   notSignedIn,
+  signedIn
 }
 
 
 
 function App() {
-  const [user, setUser] = React.useState<firebase.User | SignInState>(
-    SignInState.waiting
-  );
+  const [user, setUser] = React.useState<Player>(PlayerPlaceHolder)
+  const [signedInState, setSignedInState] = React.useState<SignInState>(SignInState.waiting);
+
   const theme = createMuiTheme({
     palette: {
       primary: {
@@ -44,21 +47,30 @@ function App() {
   };
 
 
-  useEffect( 
+  useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
+      console.log("Itsa me mario")
       if (user) {
-        setUser(user);
+        const userPlayer: Player = {
+          id: user.uid,
+          name: user.displayName ?? "",
+          email: user.email ?? ""
+        }
+        setUser(userPlayer);
+        setSignedInState(SignInState.signedIn);
+        console.log("Hola sombrero")
       } else {
-        setUser(SignInState.notSignedIn);
+        setSignedInState(SignInState.notSignedIn);
       }
-    }), []);
+    })
+    }, []);
 
   let loginScreenJsx;
-  if (user === SignInState.notSignedIn) {
+  if (signedInState === SignInState.notSignedIn) {
     loginScreenJsx = (
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     );
-  } else if (user === SignInState.waiting) {
+  } else if (signedInState === SignInState.waiting) {
     loginScreenJsx = (
       <div className="login_loader">
         <CenteredLoader />
@@ -68,9 +80,10 @@ function App() {
   return (
     <>
     <ThemeProvider theme={theme}>
+    <UserContext.Provider value={user}>
       <Router>
         <div className="App">
-        {user !== SignInState.waiting && user !== SignInState.notSignedIn ? (
+        {signedInState !== SignInState.waiting && signedInState !== SignInState.notSignedIn ? (
             <Switch>
               <Route exact path="/">
                 <HomeScreen />
@@ -92,6 +105,7 @@ function App() {
           )}
         </div>
       </Router>
+      </UserContext.Provider>
       </ThemeProvider>
     </>
   );
