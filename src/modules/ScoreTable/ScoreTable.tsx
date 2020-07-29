@@ -1,49 +1,86 @@
 import * as React from "react";
 import { ScoreEntry } from "types/ScoreEntry";
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Player from "types/Player";
-import { Hole } from "types/Field";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import { findScoreForPlayer } from "util/findScoreForPlayer";
 import { GameData } from "types/Game";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import createStyles from "@material-ui/core/styles/createStyles";
+import IconButton from "@material-ui/core/IconButton";
+import { useHistory } from "react-router-dom";
+import HomeIcon from '@material-ui/icons/Home'
+import { Hole } from "types/Field";
+import Player from "types/Player";
 
 interface ScoreTableRowProps {
-  hole: Hole; 
+  hole: Hole;
   scoreEntries: ScoreEntry[];
-  players: Player[]
+  players: Player[];
 }
 
 const getScoreDisplay = (playerScore: number, holePar: number) => {
   let diff = playerScore - holePar;
-  if(diff > 0) {
-    return <span style={{color: 'red'}}>{`${playerScore} (+${diff})`}</span>
+  if (diff > 0) {
+    return <span style={{ color: "red" }}>{`(+${diff}) ${playerScore} `}</span>;
   } else if (diff < 0) {
-    return <span style={{color: 'green'}}>{`${playerScore} (${diff})`}</span>
+    return <span style={{ color: "green" }}>{`(${diff}) ${playerScore} `}</span>;
   } else {
-    return <span>{playerScore}</span>
+    return <span>{playerScore}</span>;
   }
-}
+};
 
 const ScoreTableRow: React.FC<ScoreTableRowProps> = ({
   hole,
   scoreEntries,
-  players
+  players,
 }) => {
   return (
     <TableRow>
       <TableCell>{hole.number}</TableCell>
       <TableCell>{hole.par}</TableCell>
-      {players.map(player => {
-        const playerScore = scoreEntries.find(entry => entry.playerId === player.id)?.score;
-        return <TableCell align="right">{getScoreDisplay(playerScore ? playerScore : 0, hole.par)}</TableCell>
+      {players.map((player) => {
+        const playerScore = scoreEntries.find(
+          (entry) => entry.playerId === player.id
+        )?.score;
+        return (
+          <TableCell align="right">
+            {getScoreDisplay(playerScore ? playerScore : 0, hole.par)}
+          </TableCell>
+        );
       })}
     </TableRow>
+  );
+};
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    tableHeader: {
+      fontWeight: "bold",
+      backgroundColor: theme.palette.primary.main,
+      color: "white"
+    },
+    homeButton: {
+      position: "absolute",
+      left: "5px",
+      top: "11px"
+    }
+  })
+);
+
+const HomeButton: React.FC = () => {
+  const history = useHistory();
+  const classes = useStyles();
+  return (
+    <IconButton className={classes.homeButton} onClick={() => history.push("/")}>
+      <HomeIcon />
+    </IconButton>
   )
 }
 
@@ -51,47 +88,54 @@ export interface ScoreTableProps {
   game: GameData;
 }
 
-const ScoreTable : React.FC<ScoreTableProps> = ({
-  game
-}) => {
+
+
+const ScoreTable: React.FC<ScoreTableProps> = ({ game }) => {
+  const classes = useStyles();
   return (
     <div className="center-wrapper">
-    <TableContainer component={Paper} className="paper-wrapper">
-      <Table size="small">
-      <TableHead>
-        <TableRow>
-          <TableCell className="sum-cell">Hole</TableCell>
-          <TableCell className="sum-cell">Par</TableCell>
-          {
-            game.players.map(player => {
-              return <TableCell align="right">{player.name}</TableCell>
-            })
-          }
-        </TableRow>
-      </TableHead>
-      <TableBody>
-      <TableRow>
-        <TableCell>Sum</TableCell>
-        <TableCell>{game.field.holes.reduce((curr, acc) => curr + acc.par, 0)}</TableCell>
-        {game.players.map(player => {
-          return <TableCell align="right">{findScoreForPlayer(game.scoreEntries, player.id)}</TableCell>
-        })}
-      </TableRow>
-      {
-        game.field.holes.map(hole => {
-          return(
-            <ScoreTableRow 
-              players={game.players} 
-              hole={hole}
-              scoreEntries={game.scoreEntries.filter(entry => entry.hole === hole.number)} />
-          )
-        })
-      }
-      </TableBody>
-      </Table>
+      <HomeButton />
+      <TableContainer component={Paper} className="paper-wrapper">
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell className={classes.tableHeader}>Hole</TableCell>
+              <TableCell className={classes.tableHeader}>Par</TableCell>
+              {game.players.map((player) => {
+                return <TableCell align="right" className={classes.tableHeader}>{player.name}</TableCell>;
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>Sum</TableCell>
+              <TableCell>
+                {game.field.holes.reduce((curr, acc) => curr + acc.par, 0)}
+              </TableCell>
+              {game.players.map((player) => {
+                return (
+                  <TableCell align="right">
+                    {findScoreForPlayer(game.scoreEntries, player.id)}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+            {game.field.holes.map((hole) => {
+              return (
+                <ScoreTableRow
+                  players={game.players}
+                  hole={hole}
+                  scoreEntries={game.scoreEntries.filter(
+                    (entry) => entry.hole === hole.number
+                  )}
+                />
+              );
+            })}
+          </TableBody>
+        </Table>
       </TableContainer>
-      </div>
-  )
-}
+    </div>
+  );
+};
 
 export default ScoreTable;
