@@ -6,13 +6,14 @@ import * as firebase from 'firebase/app';
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
 import GameController from "./modules/GameController/GameController";
 import GameCreator from "./modules/GameCreator/GameCreator";
 import GameOverview from "modules/GameOverview/GameOverview";
 import HomeScreen from "modules/HomeScreen";
-import React from "react";
+import React, { useEffect } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { CenteredLoader } from "components/CenteredLoader/CenteredLoader";
+
 
 export enum SignInState {
   waiting,
@@ -41,13 +42,16 @@ function App() {
     // We will display Google and Facebook as auth providers.
     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
   };
-  firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-      setUser(user);
-    } else {
-      setUser(SignInState.notSignedIn);
-    }
-  });
+
+
+  useEffect( 
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(SignInState.notSignedIn);
+      }
+    }), []);
 
   let loginScreenJsx;
   if (user === SignInState.notSignedIn) {
@@ -55,9 +59,12 @@ function App() {
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     );
   } else if (user === SignInState.waiting) {
-    loginScreenJsx = <CircularProgress />;
+    loginScreenJsx = (
+      <div className="login_loader">
+        <CenteredLoader />
+      </div>
+    )
   }
-
   return (
     <>
     <ThemeProvider theme={theme}>
