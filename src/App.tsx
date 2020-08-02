@@ -49,7 +49,6 @@ function App() {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(function (user) {
-      console.log("Itsa me mario")
       if (user) {
         const userPlayer: Player = {
           id: user.uid,
@@ -58,7 +57,6 @@ function App() {
         }
         setUser(userPlayer);
         setSignedInState(SignInState.signedIn);
-        console.log("Hola sombrero")
       } else {
         setSignedInState(SignInState.notSignedIn);
       }
