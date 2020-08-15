@@ -14,6 +14,7 @@ import Player from 'types/Player';
 import SendIcon from '@material-ui/icons/Send';
 import format from 'date-fns/format';
 import { getGames } from 'data/FrisbeegolfData';
+import { useUser } from 'util/UseUser';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,13 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const GameOverview = () => {
   const [games, setGames] = React.useState<GameData[] | undefined>(undefined)
+  const player = useUser();
   React.useEffect(() => {
     const setupGames = async () => {
-      let games = await getGames();
+      let games = await getGames(player.name);
       setGames(games)
     }
     setupGames();
-  }, [])
+  }, [player.name])
   let classes = useStyles()
 
   const listplayers = (players: Player[]) => {

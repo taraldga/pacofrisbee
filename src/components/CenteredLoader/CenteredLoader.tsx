@@ -17,6 +17,7 @@ export const CenteredLoader : React.FC = () => {
       direction="row"
       justify="center"
       alignItems="center"
+      style={{width:"100%", height:"100%"}}
     >
       <CircularProgress />
     </Grid>

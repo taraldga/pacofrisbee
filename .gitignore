@@ -109,3 +109,7 @@ build
 .idea
 
 .DS_Store
+
+service_account_key.json
+backups/
+firestore.indexes.json
