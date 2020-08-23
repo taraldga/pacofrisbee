@@ -1,23 +1,23 @@
 import * as React from "react";
-import { ScoreEntry } from "types/ScoreEntry";
 
+import { GameData } from "types/Game";
+import { Hole } from "types/Field";
+import HomeIcon from '@material-ui/icons/Home'
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import Player from "types/Player";
+import { ScoreEntry } from "types/ScoreEntry";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TableContainer from "@material-ui/core/TableContainer";
-import Paper from "@material-ui/core/Paper";
-import { findScoreForPlayer } from "util/findScoreForPlayer";
-import { GameData } from "types/Game";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import createStyles from "@material-ui/core/styles/createStyles";
-import IconButton from "@material-ui/core/IconButton";
+import { findScoreForPlayer } from "util/findScoreForPlayer";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import { useHistory } from "react-router-dom";
-import HomeIcon from '@material-ui/icons/Home'
-import { Hole } from "types/Field";
-import Player from "types/Player";
 
 interface ScoreTableRowProps {
   hole: Hole;
@@ -92,6 +92,7 @@ export interface ScoreTableProps {
 
 const ScoreTable: React.FC<ScoreTableProps> = ({ game }) => {
   const classes = useStyles();
+  const par = game.field.holes.reduce((curr, acc) => curr + acc.par, 0);
   return (
     <div className="center-wrapper">
       <HomeButton />
@@ -115,7 +116,7 @@ const ScoreTable: React.FC<ScoreTableProps> = ({ game }) => {
               {game.players.map((player) => {
                 return (
                   <TableCell align="right">
-                    {findScoreForPlayer(game.scoreEntries, player.id)}
+                    {getScoreDisplay(findScoreForPlayer(game.scoreEntries, player.id), par)}
                   </TableCell>
                 );
               })}
