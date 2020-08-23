@@ -291,7 +291,8 @@ class GameController extends React.Component<
         />
         <Snackbar
           open={!!this.state.showSuccessBar}
-          autoHideDuration={2000}
+          anchorOrigin={{vertical: "top", horizontal:"center"}}
+          autoHideDuration={600}
           onClose={() => {
             this.setState({ showSuccessBar: false });
           }}
