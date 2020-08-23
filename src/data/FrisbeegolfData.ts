@@ -74,7 +74,7 @@ export const getPlayers = async () => {
  * Gets all games currently stored on the server
  */
 export const getGames = async (playerName: string)  =>  {
-    const firebaseObject = await db.collection('games').where('playerList', 'array-contains', playerName).get()
+    const firebaseObject = await db.collection('games').get()
     const games: GameData[] = [];
     firebaseObject.forEach(gameObject => {
         const newObject = {
