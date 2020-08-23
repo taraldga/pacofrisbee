@@ -94,7 +94,6 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Place</TableCell>
                   <TableCell>Name</TableCell>
                   <TableCell align="right">Score</TableCell>
                 </TableRow>
