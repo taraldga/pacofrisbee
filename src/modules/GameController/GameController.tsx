@@ -2,7 +2,6 @@ import "./GameController.css";
 
 import * as React from "react";
 
-import MuiAlert, { AlertProps } from "@material-ui/lab/Alert";
 import { deleteGame, fetchGame, saveScore, updateGame } from "data/FrisbeegolfData";
 
 import Button from "@material-ui/core/Button";
@@ -18,13 +17,8 @@ import Save from "@material-ui/icons/Save";
 import ScoreDialog from "components/ScoreDialog/ScoreDialog";
 import { ScoreEntry } from "types/ScoreEntry";
 import ScoreTable from "modules/ScoreTable/ScoreTable";
-import Snackbar from "@material-ui/core/Snackbar";
 import { createInitialScoreEntries } from "util/createInitialScoreEntries";
 import { withRouter } from "react-router-dom";
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 export interface GameControllerState {
   gameId: string;
