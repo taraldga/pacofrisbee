@@ -288,24 +288,9 @@ class GameController extends React.Component<
           handleClose={() => this.toggleShowStandings()}
           players={game.players}
           scoreEntries={game.scoreEntries}
+          currentPar={game.field.holes.reduce((acc, curr) => curr.isPlayed ? acc + curr.par : acc , 0) }
+          
         />
-        <Snackbar
-          open={!!this.state.showSuccessBar}
-          anchorOrigin={{vertical: "top", horizontal:"center"}}
-          autoHideDuration={600}
-          onClose={() => {
-            this.setState({ showSuccessBar: false });
-          }}
-        >
-          <Alert
-            onClose={() => {
-              this.setState({ showSuccessBar: false });
-            }}
-            severity="success"
-          >
-            The scores were saved!
-          </Alert>
-        </Snackbar>
         <Grid container direction="row" justify="center" alignItems="center">
           <HoleNavigation
             onChange={(_, nextPage) => changePage(nextPage)}

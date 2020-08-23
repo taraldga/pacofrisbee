@@ -19,6 +19,17 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { TransitionProps } from "@material-ui/core/transitions/transition";
 
+const getScoreDisplay = (playerScore: number, holePar: number) => {
+  let diff = playerScore - holePar;
+  if (diff > 0) {
+    return <span style={{ color: "red" }}>{`(+${diff}) ${playerScore} `}</span>;
+  } else if (diff < 0) {
+    return <span style={{ color: "green" }}>{`(${diff}) ${playerScore} `}</span>;
+  } else {
+    return <span>{playerScore}</span>;
+  }
+};
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     dialog: {
@@ -32,6 +43,7 @@ export interface ScoreDialogProps {
   players: Player[];
   isOpen: boolean;
   handleClose: () => void;
+  currentPar: number;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -47,6 +59,7 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
   players,
   isOpen,
   handleClose,
+  currentPar
 }) => {
   const classes = useStyles();
   if (!isOpen) {
@@ -67,7 +80,6 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
       };
     })
     .sort((a, b) => a.totalScore - b.totalScore);
-
   return (
     <Dialog
       open={isOpen}
@@ -91,10 +103,9 @@ const ScoreDialog: React.FC<ScoreDialogProps> = ({
                 {scoreBoard.map((playerScore, idx) => {
                   return (
                     <TableRow>
-                      <TableCell>{idx + 1}</TableCell>
-                      <TableCell>{playerScore.name}</TableCell>
-                      <TableCell align="right">
-                        {playerScore.totalScore}
+                      <TableCell key={`playerscore-name-${idx}`}>{playerScore.name}</TableCell>
+                      <TableCell key={`playerscore-score-${idx}`} align="right">
+                        {getScoreDisplay(playerScore.totalScore, currentPar)}
                       </TableCell>
                     </TableRow>
                   );
