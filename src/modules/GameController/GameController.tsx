@@ -36,16 +36,17 @@ export interface GameControllerState {
   game?: GameData;
   currentScoreEntries?: ScoreEntry[];
 }
-// Type whatever you expect in 'this.props.match.params.*'
+
 type PathParamsType = {
   gameId: string;
   holeId: string;
 };
 
-// Your component own properties
+
 type GameControllerProps = RouteComponentProps<PathParamsType> & {
   someString: string;
 };
+
 class GameController extends React.Component<
   GameControllerProps,
   GameControllerState
