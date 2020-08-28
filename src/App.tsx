@@ -9,6 +9,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import GameController from "./modules/GameController/GameController";
 import GameCreator from "./modules/GameCreator/GameCreator";
 import GameOverview from "modules/GameOverview/GameOverview";
+import Stats from './modules/Stats/Stats'
 import HomeScreen from "modules/HomeScreen";
 import React, { useEffect } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
@@ -88,6 +89,9 @@ function App() {
               </Route>
               <Route exact path="/create-game">
                 <GameCreator />
+              </Route>
+              <Route exact path="/stats">
+                <Stats />
               </Route>
               <Route
                 exact

@@ -43,6 +43,7 @@ const useStyles = makeStyles(() =>
 );
 
 const HomeScreen : React.FC = () => {
+  console.log("Hello?")
     const classes = useStyles()
     return (
         <div className={classes.layout}>
@@ -53,6 +54,9 @@ const HomeScreen : React.FC = () => {
             </Link>
             <Link to="/gameoverview">
                 <Button className={classes.startButton} variant="outlined" size="large">History</Button>
+            </Link>
+            <Link to="/stats">
+                <Button className={classes.startButton} variant="outlined" size="large">Stats</Button>
             </Link>
           </div>
         </div>

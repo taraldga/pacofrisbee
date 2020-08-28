@@ -140,3 +140,10 @@ export const deleteGame = async (game: GameData) => {
     const ok = await ref.delete();
     return ok
 }
+
+
+export const getStatsForPlayer = async (player: string) => {
+    const result = await db.collection('stats').doc(player).get();
+    console.log(result)
+    return result.data()
+}
