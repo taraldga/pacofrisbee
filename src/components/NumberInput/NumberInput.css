@@ -1,28 +1,23 @@
 .number-input {
-  max-width: 50px;
+  width: 40px;
   font-weight: bold;
   background-color: white;
 }
-.number-input>div>input {
-  height: 12px;
-  border: none;
-  color: black;
-}
+
 .button-group>button {
   border: none !important;
+  border-radius: 50%;
 }
 .button-group>div {
   border: none !important;
 }
-.dirty-score > div > input {
+.dirty-score {
   color: green !important;
   font-weight: bolder;
 }
 
 .button-group {
   display: inline-flex;
-  border-radius: 4px;
-  width: 150px;
 }
 .button-group > button {
   min-width: 40px;
