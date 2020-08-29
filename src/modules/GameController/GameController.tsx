@@ -244,7 +244,6 @@ class GameController extends React.Component<
         <div>
         <HoleView
           players={game.players}
-          holeNumber={this.state.currentHole}
           scoreEntries={this.state.currentScoreEntries}
           updateScoreEntry={(playerId, newScore) =>
             this.updateScoreEntry(

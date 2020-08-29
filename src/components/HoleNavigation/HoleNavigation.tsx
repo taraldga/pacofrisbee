@@ -2,12 +2,9 @@ import * as React from "react";
 
 import Field from "types/Field";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import usePagination from "@material-ui/lab/Pagination/usePagination";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from '@material-ui/core/Tab';
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
 import { Theme } from "@material-ui/core/styles";
 
 
@@ -17,32 +14,6 @@ export interface HoleNavigationProps {
   disabled: boolean;
   field: Field;
   onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-force-tabpanel-${index}`}
-      aria-labelledby={`scrollable-force-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
 }
 
 function a11yProps(index: any) {

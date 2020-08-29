@@ -17,7 +17,6 @@ import TableContainer from '@material-ui/core/TableContainer'
 export interface HoleViewProps {
   players: Player[];
   scoreEntries: ScoreEntry[];
-  holeNumber: number;
   updateScoreEntry: (playerId: string, newScore: number) => void
 }
 
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const HoleView: React.FC<HoleViewProps> = ({
   players,
   scoreEntries,
-  holeNumber,
   updateScoreEntry
 }) => {
   const classes = useStyles();
