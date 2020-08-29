@@ -1,10 +1,15 @@
 import * as React from "react";
 
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
 import Field from "types/Field";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import usePagination from "@material-ui/lab/Pagination/usePagination";
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from '@material-ui/core/Tab';
+import Box from "@material-ui/core/Box";
+import Typography from "@material-ui/core/Typography";
+import { Theme } from "@material-ui/core/styles";
+
 
 export interface HoleNavigationProps {
   currentHole: number;
@@ -13,65 +18,50 @@ export interface HoleNavigationProps {
   field: Field;
   onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
-const buttonSize = "38px";
-const useStyles = makeStyles({
-  ul: {
-    listStyle: "none",
-    margin: 0,
-    display: "flex",
-    padding: 0,
-    alignItems: "center",
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: any) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    flexGrow: 1,
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
   },
-  item: {
-    borderRadius: "4px",
-    margin: "0 3px",
-    height: buttonSize,
-    fontSize: "0.9375rem",
-    minWidth: buttonSize,
-    maxWidth: buttonSize,
-    border: "1px solid rgba(0, 0, 0, 0.23)",
-    backgroundColor: "transparent",
-    position: "relative",
-    textAlign: "center",
-    fontWeight: "normal",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    userSelect: "none",
-    outline: "0",
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.04)",
-      cursor: "pointer",
-    },
-    transition:
-      "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+  appBar: {
+    top: 'auto',
+    bottom: 0,
   },
-  saved: {
-    backgroundColor: "rgb(76,175,80, 0.12)"
-  },
-  selectedItem: {
-    color: "#3f51b5",
-    border: "1px solid gba(63, 81, 181, 0.5)",
-    backgroundColor: "rgba(63, 81, 181, 0.12)",
-  },
-  disabled: {
-    opacity: "0.38",
-    "&:hover": {
-      cursor: "default",
-    },
-  },
-  ellipsis: {
-    height: "auto",
-    fontSize: "0.9375rem",
-    minWidth: buttonSize,
-    maxWidth: buttonSize,
-    borderRadius: "20px",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: "0 3px"
-  }
-});
+}));
 
 const HoleNavigation: React.FC<HoleNavigationProps> = ({
   currentHole,
@@ -80,74 +70,24 @@ const HoleNavigation: React.FC<HoleNavigationProps> = ({
   disabled,
   field
 }) => {
-  const { items } = usePagination({
-    count,
-    onChange,
-    disabled,
-    page: currentHole,
-    siblingCount:0,
-  });
+
   const classes = useStyles();
+  const numberArray = React.useMemo(() => Array.apply(null, Array(count)).map(function (_, i) {return i + 1;}), [count]);
+  const isFinishedColor = (num: number) => field.holes[num - 1].isPlayed ? "rgb(76,175,80, 0.12)" : undefined;
+
   return (
-    <nav>
-      <ul className={classes.ul}>
-        {items.map(({ page, type, selected, ...item }, index) => {
-          let children;
-          if (type === "start-ellipsis" || type === "end-ellipsis") {
-            children = (
-              <div className={`${classes.ellipsis}`}>
-                …
-              </div>
-            );
-          } else if (type === "page") {
-            const selectedType = selected ? classes.selectedItem : "";
-            const savedType = field.holes[page-1].isPlayed ? classes.saved : "";
-            children = (
-              <button
-                className={`${classes.item} ${selectedType} ${savedType}`}
-                type="button"
-                style={{ fontWeight: selected ? "bold" : undefined }}
-                {...item}
-              >
-                {page}
-              </button>
-            );
-          } else if (type === "previous") {
-            const disabledClass = currentHole === 1 ? classes.disabled : "";
-            children = (
-              <button
-                className={`${classes.item} ${disabledClass}`}
-                {...item}
-                type="button"
-              >
-                <ChevronLeft />
-              </button>
-            );
-          } else if (type === "next") {
-            const disabledClass = currentHole === count ? classes.disabled : "";
-            children = (
-              <button
-                className={`${classes.item} ${disabledClass}`}
-                {...item}
-                type="button"
-              >
-                <ChevronRight />
-              </button>
-            );
-          } else {
-            children = (
-              <button
-                type="button"
-                {...item}
-                onClick={(e) => onChange(e, currentHole)}
-              >
-                {type}
-              </button>
-            );
-          }
-          return <li key={index}>{children}</li>;
-        })}
-      </ul>
+    <nav className={classes.root}>
+      <AppBar position="fixed"  color="default" className={classes.appBar}>
+        <Tabs
+          value={currentHole - 1}
+          onChange={(e, id) => onChange(e, id+1)}
+          variant="scrollable"
+          scrollButtons="on"
+          indicatorColor="primary"
+          >
+          {numberArray.map((_, idx) => <Tab key={`nav-item-${idx + 1}`} style={{backgroundColor: isFinishedColor(idx + 1)}} label={idx+1} {...a11yProps(idx+1)} />  )}
+        </Tabs>
+      </AppBar>
     </nav>
   );
 };
