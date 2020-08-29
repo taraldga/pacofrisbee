@@ -43,7 +43,6 @@ const useStyles = makeStyles(() =>
 );
 
 const HomeScreen : React.FC = () => {
-  console.log("Hello?")
     const classes = useStyles()
     return (
         <div className={classes.layout}>
