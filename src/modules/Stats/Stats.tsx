@@ -7,6 +7,7 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import { createStyles, Theme } from '@material-ui/core/styles';
 import { IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home'
+import { ThrowTypeGraph } from './Compontents/ThrowTypeGraph'
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,26 +41,32 @@ const Stats: React.FC<{}> = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      console.log(user.name)
       const data = await getStatsForPlayer(user.name);
-      console.log(data)
       setCurrentUserStats(data);
     }
     fetchData();
   }, [user.name])
 
   if(!currentUserStats) return <div />
-  console.log(Object.keys(currentUserStats))
+
   return(
     <div className="center-wrapper">
       <h1> Super Barebone stats </h1>
       <HomeButton />
+      <ThrowTypeGraph 
+        aces={currentUserStats['numberOfAces']}
+        eagles={currentUserStats['numberOfEagles']}
+        birdies={currentUserStats['numberOfBirdies']}
+        pars={currentUserStats['numberOfPars']}
+        bogeys={currentUserStats['numberOfBogeys']}
+        doubleBogeys={currentUserStats['numberOfDoubleBogeys']}
+      />
       {Object.keys(currentUserStats).filter(key => typeof(currentUserStats[key]) === 'number').map(statKey => {
         return(
           <>
           <div style={{display:"flex",justifyContent:"space-between", padding: "20px"}}>
             <div><strong>{statKey}:</strong></div>
-            <div>{currentUserStats[statKey]}</div>
+            <div>{Math.round(currentUserStats[statKey]*100)/100}</div>
           </div>
           <hr/>
           </>
