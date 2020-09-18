@@ -55,7 +55,6 @@ function App() {
       </div>
     );
   }
-  console.log(signedInState)
   return (
     <>
       <ThemeProvider theme={theme}>
