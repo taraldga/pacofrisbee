@@ -3,7 +3,7 @@ import * as React from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
-import Image from '../images/DiscGolfSmall.jpg';
+import Image from '../../images/DiscGolfSmall.jpg';
 import { Link } from 'react-router-dom'
 import SendIcon from '@material-ui/icons/Send';
 
