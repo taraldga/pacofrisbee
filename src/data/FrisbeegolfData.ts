@@ -79,8 +79,8 @@ export const getGames = async (savedLatestGameRef?: any)  =>  {
     if(savedLatestGameRef) {
         firebaseObject = await db
           .collection('games')
-          .startAfter(savedLatestGameRef)
           .orderBy("date", "desc")
+          .startAfter(savedLatestGameRef)
           .limit(10)
           .get()
     } else {
