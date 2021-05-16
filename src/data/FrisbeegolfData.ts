@@ -73,9 +73,23 @@ export const getPlayers = async () => {
 /**
  * Gets all games currently stored on the server
  */
-export const getGames = async (playerName: string)  =>  {
-    const firebaseObject = await db.collection('games').get()
+export const getGames = async (savedLatestGameRef?: any)  =>  {
+
+    let firebaseObject
+    if(savedLatestGameRef) {
+        firebaseObject = await db
+          .collection('games')
+          .startAfter(savedLatestGameRef)
+          .limit(10)
+          .get()
+    } else {
+        firebaseObject = await db
+          .collection('games')
+          .limit(10)
+          .get()
+    }
     const games: GameData[] = [];
+    const latestGameRef = firebaseObject.docs[firebaseObject.docs.length-1];
     firebaseObject.forEach(gameObject => {
         const newObject = {
             ...gameObject.data(),
@@ -84,7 +98,7 @@ export const getGames = async (playerName: string)  =>  {
         }
         games.push(newObject as GameData)
     })
-    return games;
+    return {games, latestGameRef };
 }
 
 /**
