@@ -80,12 +80,14 @@ export const getGames = async (savedLatestGameRef?: any)  =>  {
         firebaseObject = await db
           .collection('games')
           .startAfter(savedLatestGameRef)
+          .orderBy("date", "desc")
           .limit(10)
           .get()
     } else {
         firebaseObject = await db
           .collection('games')
           .limit(10)
+          .orderBy("date", "desc")
           .get()
     }
     const games: GameData[] = [];
