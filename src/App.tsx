@@ -1,7 +1,8 @@
 import "./App.css";
 import "firebase/auth";
 
-import * as firebase from "firebase/app";
+import * as firebase from "firebase";
+
 
 import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
@@ -33,6 +34,11 @@ function App() {
   });
 
   useEffect(() => {
+
+    // Initialize performance monitoring
+    firebase.performance()
+
+    //Initialize auth
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         const userPlayer: Player = {
